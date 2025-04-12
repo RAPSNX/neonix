@@ -6,7 +6,6 @@
     ./langs/helm.nix
     ./langs/rust.nix
     ./langs/yaml.nix
-    ./langs/terraform.nix
 
     # Debugging
     ./debug/dap.nix
