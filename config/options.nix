@@ -28,7 +28,6 @@
 
     # search
     ignorecase = true; # ignores case in search
-    smartcase = true; # if uppercase found -> case sensitive search
     tabstop = 4;
     softtabstop = 4;
     shiftwidth = 4;
