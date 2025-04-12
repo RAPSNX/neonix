@@ -3,9 +3,10 @@
     enable = true;
   };
 
-  # diagnostics = {
-  #   update_in_insert = true;
-  # };
+  diagnostics = {
+    update_in_insert = true;
+    virtual_text = true;
+  };
 
   keymaps = [
     {
