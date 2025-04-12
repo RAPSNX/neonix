@@ -107,6 +107,9 @@
     };
     lsp-signature = {
       enable = true;
+      settings = {
+        doc_lines = 0;
+      };
     };
   };
 }
