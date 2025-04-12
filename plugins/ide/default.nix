@@ -6,6 +6,7 @@
     ./langs/helm.nix
     ./langs/rust.nix
     ./langs/yaml.nix
+    ./langs/bash.nix
 
     # Debugging
     ./debug/dap.nix
