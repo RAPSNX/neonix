@@ -16,28 +16,11 @@
 
       extraOptions.settings = {
         gopls = {
-          staticcheck = false;
+          staticcheck = true;
           directoryFilters = [
             "-.git"
             "-.vscode"
           ];
-
-          semanticTokens = true;
-          analyses = {
-            fieldalignment = true;
-            useany = true;
-          };
-
-          codelenses = {
-            gc_details = false;
-            generate = true;
-            regenerate_cgo = true;
-            run_govulncheck = true;
-            test = true;
-            tidy = true;
-            upgrade_dependency = true;
-            vendor = true;
-          };
         };
       };
     };

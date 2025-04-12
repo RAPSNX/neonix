@@ -57,7 +57,7 @@
     ];
     colorcolumn = "120";
 
-    # updatetime = 100;
+    updatetime = 1000;
     # timeout = true;
     # timeoutlen = 350;
 
