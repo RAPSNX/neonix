@@ -38,17 +38,6 @@
       };
     };
 
-    lint = {
-      lintersByFt = {
-        nix = ["statix"];
-      };
-      linters = {
-        statix = {
-          cmd = lib.getExe pkgs.statix;
-        };
-      };
-    };
-
     treesitter = {
       grammarPackages = with config.plugins.treesitter.package.builtGrammars; [nix];
     };

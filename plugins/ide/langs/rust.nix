@@ -24,17 +24,6 @@
         };
       };
     };
-
-    lint = {
-      lintersByFt = {
-        rust = ["clippy"];
-      };
-      linters = {
-        clippy = {
-          cmd = lib.getExe pkgs.clippy;
-        };
-      };
-    };
   };
   plugins.treesitter = {
     grammarPackages = with config.plugins.treesitter.package.builtGrammars; [rust];

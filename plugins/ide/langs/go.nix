@@ -14,32 +14,32 @@
     lsp.servers.gopls = {
       enable = true;
 
-      # extraOptions.settings = {
-      #   gopls = {
-      #     staticcheck = true;
-      #     directoryFilters = [
-      #       "-.git"
-      #       "-.vscode"
-      #     ];
-      #
-      #     semanticTokens = true;
-      #     analyses = {
-      #       fieldalignment = true;
-      #       useany = true;
-      #     };
-      #
-      #     codelenses = {
-      #       gc_details = false;
-      #       generate = true;
-      #       regenerate_cgo = true;
-      #       run_govulncheck = true;
-      #       test = true;
-      #       tidy = true;
-      #       upgrade_dependency = true;
-      #       vendor = true;
-      #     };
-      #   };
-      # };
+      extraOptions.settings = {
+        gopls = {
+          staticcheck = false;
+          directoryFilters = [
+            "-.git"
+            "-.vscode"
+          ];
+
+          semanticTokens = true;
+          analyses = {
+            fieldalignment = true;
+            useany = true;
+          };
+
+          codelenses = {
+            gc_details = false;
+            generate = true;
+            regenerate_cgo = true;
+            run_govulncheck = true;
+            test = true;
+            tidy = true;
+            upgrade_dependency = true;
+            vendor = true;
+          };
+        };
+      };
     };
 
     dap-go = {
@@ -72,17 +72,6 @@
           goimports = {
             command = lib.getExe' pkgs.gotools "goimports";
           };
-        };
-      };
-    };
-
-    lint = {
-      lintersByFt = {
-        go = ["golangcilint"];
-      };
-      linters = {
-        golangcilint = {
-          cmd = lib.getExe pkgs.golangci-lint;
         };
       };
     };
