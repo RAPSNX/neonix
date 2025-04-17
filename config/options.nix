@@ -61,6 +61,9 @@
     foldlevelstart = 99;
     foldenable = true;
 
+    foldmethod = "expr";
+    foldexpr = "nvim_treesitter#foldexpr()";
+
     winwidth = 10;
     winminwidth = 10;
     equalalways = false;
