@@ -57,10 +57,6 @@
     ];
     colorcolumn = "120";
 
-    updatetime = 1000;
-    # timeout = true;
-    # timeoutlen = 350;
-
     foldlevel = 99;
     foldlevelstart = 99;
     foldenable = true;
