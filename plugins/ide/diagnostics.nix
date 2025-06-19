@@ -3,7 +3,7 @@
     enable = true;
   };
 
-  diagnostics = {
+  diagnostic.settings = {
     update_in_insert = true;
     virtual_text = true;
   };
