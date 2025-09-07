@@ -1,12 +1,14 @@
 {
   imports = [
     # Languages
-    ./langs/go.nix
     ./langs/nix.nix
-    ./langs/helm.nix
+    ./langs/go.nix
     ./langs/rust.nix
-    ./langs/yaml.nix
     ./langs/bash.nix
+
+    ./langs/helm.nix
+    ./langs/yaml.nix
+    ./langs/json.nix
 
     # Debugging
     ./debug/dap.nix
