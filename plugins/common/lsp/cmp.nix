@@ -1,6 +1,4 @@
-{pkgs, ...}: {
-  extraPlugins = [pkgs.vimPlugins.lsp_signature-nvim];
-
+{
   plugins = {
     cmp-nvim-lsp.enable = true;
     cmp-path.enable = true;
@@ -107,18 +105,11 @@
         };
       };
     };
+    lsp-signature = {
+      enable = true;
+      settings = {
+        doc_lines = 0;
+      };
+    };
   };
-  extraConfigLua = ''
-    require "lsp_signature".setup({
-      handler_opts = {
-        border = "none"
-      },
-    })
-    local golang_setup = {
-      on_attach = function(client, bufnr)
-        require "lsp_signature".on_attach(signature_setup, bufnr)  -- Note: add in lsp client on-attach
-      end,
-    }
-    require'lspconfig'.gopls.setup(golang_setup)
-  '';
 }

@@ -28,7 +28,6 @@
 
     # search
     ignorecase = true; # ignores case in search
-    smartcase = true; # if uppercase found -> case sensitive search
     tabstop = 4;
     softtabstop = 4;
     shiftwidth = 4;
@@ -58,13 +57,12 @@
     ];
     colorcolumn = "120";
 
-    updatetime = 100;
-    timeout = true;
-    timeoutlen = 350;
-
     foldlevel = 99;
     foldlevelstart = 99;
     foldenable = true;
+
+    foldmethod = "expr";
+    foldexpr = "nvim_treesitter#foldexpr()";
 
     winwidth = 10;
     winminwidth = 10;

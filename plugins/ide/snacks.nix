@@ -1,18 +1,17 @@
-{pkgs, ...}: {
-  extraPlugins = with pkgs.vimPlugins; [snacks-nvim];
-
-  extraConfigLuaPre = ''
-    require "snacks".setup({
-      bigfile = {},
-      gitbrowse = {},
-      lazygit = {},
-      notifier = {},
-      notify = {},
-      scroll = {},
-      terminal = {},
-      quickfile = {},
-    })
-  '';
+{
+  plugins.snacks = {
+    enable = true;
+    settings = {
+      bigfile.enabled = true;
+      gitbrowse.enabled = true;
+      lazygit.enabled = true;
+      notifier.enabled = true;
+      notify.enabled = true;
+      quickfile.enabled = true;
+      terminal.enabled = true;
+      scroll.enabled = true;
+    };
+  };
 
   keymaps = [
     {

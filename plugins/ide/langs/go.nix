@@ -21,23 +21,6 @@
             "-.git"
             "-.vscode"
           ];
-
-          semanticTokens = true;
-          analyses = {
-            fieldalignment = true;
-            useany = true;
-          };
-
-          codelenses = {
-            gc_details = false;
-            generate = true;
-            regenerate_cgo = true;
-            run_govulncheck = true;
-            test = true;
-            tidy = true;
-            upgrade_dependency = true;
-            vendor = true;
-          };
         };
       };
     };
@@ -72,17 +55,6 @@
           goimports = {
             command = lib.getExe' pkgs.gotools "goimports";
           };
-        };
-      };
-    };
-
-    lint = {
-      lintersByFt = {
-        go = ["golangcilint"];
-      };
-      linters = {
-        golangcilint = {
-          cmd = lib.getExe pkgs.golangci-lint;
         };
       };
     };

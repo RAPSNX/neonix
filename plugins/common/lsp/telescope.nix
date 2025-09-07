@@ -9,8 +9,17 @@
       enable = true;
 
       settings.pickers = {
-        buffers.initial_mode = "normal";
-        buffers.theme = "ivy";
+        buffers = {
+          initial_mode = "normal";
+          theme = "ivy";
+        };
+        find_files = {
+          follow = true;
+          hidden = true;
+        };
+        live_grep = {
+          additional_args = ["--follow"];
+        };
       };
 
       extensions.fzf-native.enable = true;

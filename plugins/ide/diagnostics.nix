@@ -3,6 +3,11 @@
     enable = true;
   };
 
+  diagnostic.settings = {
+    update_in_insert = true;
+    virtual_text = true;
+  };
+
   keymaps = [
     {
       action = "<cmd>lua vim.diagnostic.open_float()<cr>";
