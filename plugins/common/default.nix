@@ -23,6 +23,6 @@
     nvim-autopairs.enable = true;
     web-devicons.enable = true; # dependency for core-plugins
     headlines.enable = true; # highlights for markdown
-    sleuth.enable = true; # autoconfig for tabstop and width
+    indent-o-matic.enable = true;
   };
 }

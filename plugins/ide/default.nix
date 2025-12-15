@@ -6,7 +6,6 @@
     ./langs/rust.nix
     ./langs/bash.nix
 
-    ./langs/helm.nix
     ./langs/yaml.nix
     ./langs/json.nix
 
@@ -24,6 +23,7 @@
     # Navigation / UX
     ./snacks.nix
     ./navic.nix
+    ./spectre.nix
   ];
 
   plugins = {
