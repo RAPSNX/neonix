@@ -3,9 +3,10 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   extraPackages = with pkgs; [
-    alejandra
+    nixfmt-rfc-style
     statix
   ];
 
@@ -17,11 +18,11 @@
     conform-nvim = {
       settings = {
         formatters_by_ft = {
-          nix = ["alejandra"];
+          nix = [ "nixfmt" ];
         };
         formatters = {
-          alejandra = {
-            command = lib.getExe pkgs.alejandra;
+          nixfmt = {
+            command = lib.getExe pkgs.nixfmt-rfc-style;
           };
         };
       };
@@ -39,7 +40,7 @@
     };
 
     treesitter = {
-      grammarPackages = with config.plugins.treesitter.package.builtGrammars; [nix];
+      grammarPackages = with config.plugins.treesitter.package.builtGrammars; [ nix ];
     };
   };
 
