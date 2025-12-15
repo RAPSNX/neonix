@@ -24,6 +24,7 @@
     # Navigation / UX
     ./snacks.nix
     ./navic.nix
+    ./spectre.nix
   ];
 
   plugins = {
