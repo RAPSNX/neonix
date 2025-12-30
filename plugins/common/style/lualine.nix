@@ -41,6 +41,7 @@
             color = {
               fg = "#FFF";
             };
+            path = 1;
           }
         ];
         lualine_c = [
