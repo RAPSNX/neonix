@@ -20,7 +20,6 @@
   ];
 
   plugins = {
-    lz-n.enable = true; # LazyLoad libary
     nvim-autopairs.enable = true;
     web-devicons.enable = true; # dependency for core-plugins
     headlines.enable = true; # highlights for markdown

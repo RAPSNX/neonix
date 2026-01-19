@@ -21,23 +21,57 @@
           };
         };
         keymap = {
-          preset = "super-tab";
+          preset = "enter";
+          "<Tab>" = [
+            "select_next"
+            "fallback"
+          ];
+          "<S-Tab>" = [
+            "select_prev"
+            "fallback"
+          ];
+          "<C-n>" = [
+            "snippet_forward"
+            "fallback"
+          ];
+          "<C-p>" = [
+            "snippet_backward"
+            "fallback"
+          ];
         };
         signature = {
           enabled = true;
         };
         sources = {
-          cmdline = [];
+          default = [
+            "lsp"
+            "path"
+            "snippets"
+            "buffer"
+            "emoji"
+          ];
+
+          cmdline = [ ];
           providers = {
             buffer = {
               score_offset = -7;
             };
             lsp = {
-              fallbacks = [];
+              fallbacks = [ ];
+            };
+            emoji = {
+              module = "blink-emoji";
+              name = "Emoji";
+              score_offset = 15;
+              # Optional configurations
+              opts = {
+                insert = true;
+              };
             };
           };
         };
       };
     };
+    blink-emoji.enable = true;
   };
 }
