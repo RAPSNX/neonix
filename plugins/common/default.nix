@@ -2,7 +2,8 @@
   imports = [
     # LSP
     ./lsp/lsp.nix
-    ./lsp/cmp.nix
+    # ./lsp/cmp.nix
+    ./lsp/blink.nix
     ./lsp/snippet.nix
     ./lsp/better-escape.nix
     ./lsp/treesitter.nix
