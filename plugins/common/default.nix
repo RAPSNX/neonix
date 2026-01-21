@@ -24,5 +24,6 @@
     web-devicons.enable = true; # dependency for core-plugins
     headlines.enable = true; # highlights for markdown
     indent-o-matic.enable = true;
+    teamtype.enable = true;
   };
 }
