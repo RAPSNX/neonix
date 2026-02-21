@@ -6,7 +6,7 @@
 }:
 {
   extraPackages = with pkgs; [
-    nixfmt-rfc-style
+    nixfmt
     statix
   ];
 
@@ -22,7 +22,7 @@
         };
         formatters = {
           nixfmt = {
-            command = lib.getExe pkgs.nixfmt-rfc-style;
+            command = lib.getExe pkgs.nixfmt;
           };
         };
       };

@@ -17,9 +17,12 @@
 
   # Theme or related plugins
   plugins = {
+    web-devicons.enable = true; # dependency for core-plugins
     colorizer.enable = true; # highlight hex colors & more
     illuminate.enable = true; # highlight word under cursor
     todo-comments.enable = true; # highlight todo comments
+    dressing.enable = true; # better ui-elements
+    headlines.enable = true; # highlights for markdown
   };
 
   # Colorscheme overwrites / fixes

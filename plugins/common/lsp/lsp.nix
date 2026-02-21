@@ -34,5 +34,8 @@
         };
       };
     };
+    fidget.enable = true; # LSP progress
+    nvim-autopairs.enable = true;
+    indent-o-matic.enable = true; # Auto detect tabstop
   };
 }
