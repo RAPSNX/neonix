@@ -22,7 +22,7 @@ in
       packages = [
         statix
         deadnix
-        nixfmt-rfc-style
+        nixfmt
         nix-inspect
       ];
     };

@@ -11,6 +11,8 @@
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    import-tree.url = "github:vic/import-tree";
   };
 
   outputs =
@@ -29,6 +31,7 @@
         "aarch64-darwin"
         "aarch64-linux"
       ];
+
       pkgsFor = lib.genAttrs systems (
         system:
         import nixpkgs {
@@ -36,10 +39,14 @@
           config.allowUnfree = true;
         }
       );
+
       forAllSystems = f: lib.genAttrs systems (system: f pkgsFor.${system});
+
+      modules = [
+      ];
     in
     {
-      formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+      formatter = forAllSystems (pkgs: pkgs.nixfmt);
       devShells = forAllSystems (pkgs: import ./devshell.nix { inherit pkgs pre-commit-hooks; });
 
       homeManagerModules = {
@@ -48,13 +55,13 @@
       };
 
       packages = forAllSystems (pkgs: {
+        lalilu = modules;
         default = nixvim.legacyPackages.${pkgs.stdenv.hostPlatform.system}.makeNixvimWithModule {
           inherit pkgs;
           module = {
             imports = [
-              ./config
-              ./plugins/common
-              ./plugins/ide
+              (inputs.import-tree ./config)
+              (inputs.import-tree ./plugins)
             ];
           };
           # You can use `extraSpecialArgs` to pass additional arguments to your module files
@@ -66,8 +73,8 @@
           inherit pkgs;
           module = {
             imports = [
-              ./config
-              ./plugins/common
+              (inputs.import-tree ./config)
+              (inputs.import-tree ./plugins/common)
             ];
           };
           # You can use `extraSpecialArgs` to pass additional arguments to your module files
