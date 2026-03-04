@@ -60,12 +60,12 @@
     ];
     colorcolumn = "120";
 
+    foldenable = true;
+    foldmethod = "expr";
+    foldexpr = "v:lua.vim.treesitter.foldexpr()";
     foldlevel = 99;
     foldlevelstart = 99;
-    foldenable = true;
-
-    foldmethod = "expr";
-    foldexpr = "nvim_treesitter#foldexpr()";
+    foldtext = "";
 
     winwidth = 10;
     winminwidth = 10;
