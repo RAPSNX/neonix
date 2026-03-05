@@ -8,7 +8,7 @@ let
         owner = "nvim-contrib";
         repo = "nvim-ginkgo";
         rev = "main";
-        hash = "sha256-M4i8wyQkTV/y4QpU0743Vzdt8UEY/9LSOedZ0R2rDA8=";
+        hash = "sha256-2GoWbmu/Rgf8ilxahua27Hn2ilB2rIzhuwl9+knJhv8=";
       };
     }).overrideAttrs
       (_old: {
@@ -48,7 +48,7 @@ in
       mode = [ "n" ];
     }
     {
-      action = ''<cmd>Neotest summary<CR>'';
+      action = "<cmd>Neotest summary<CR>";
       key = "<leader>ts";
       options = {
         desc = "enable ginkgo adapter";
