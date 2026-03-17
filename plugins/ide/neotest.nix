@@ -7,8 +7,8 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "nvim-contrib";
         repo = "nvim-ginkgo";
-        rev = "main";
-        hash = "sha256-2GoWbmu/Rgf8ilxahua27Hn2ilB2rIzhuwl9+knJhv8=";
+        rev = "v0.3.1";
+        hash = "sha256-4Srp+UjSJE12xVpCEEj8bR5k6D1sqsGLb0JfYcWQjJg=";
       };
     }).overrideAttrs
       (_old: {
