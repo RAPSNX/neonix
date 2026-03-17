@@ -1,31 +1,9 @@
 { pkgs, ... }:
-let
-  neovim-ginkgo =
-    (pkgs.vimUtils.buildVimPlugin {
-      pname = "neovim-ginkgo";
-      version = "main";
-      src = pkgs.fetchFromGitHub {
-        owner = "nvim-contrib";
-        repo = "nvim-ginkgo";
-        rev = "v0.3.1";
-        hash = "sha256-4Srp+UjSJE12xVpCEEj8bR5k6D1sqsGLb0JfYcWQjJg=";
-      };
-    }).overrideAttrs
-      (_old: {
-        doCheck = false;
-      });
-in
 {
   extraPlugins = [
-    neovim-ginkgo
     pkgs.vimPlugins.neotest-go
   ];
 
-  extraPackages = [
-    pkgs.ginkgo
-  ];
-
-  # Only enable the plugin and configure via lua
   plugins.neotest = {
     enable = true;
   };
@@ -62,7 +40,6 @@ in
     ''
        require("neotest").setup({
          adapters = {
-           require("nvim-ginkgo"),
            require("neotest-go")
          },
        })
