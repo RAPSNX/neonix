@@ -3,12 +3,13 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   plugins = {
     conform-nvim = {
       settings = {
         formatters_by_ft = {
-          yaml = ["yamlfmt"];
+          yaml = [ "yamlfmt" ];
         };
         formatters = {
           yamlfmt = {
@@ -17,14 +18,15 @@
         };
       };
     };
-    lsp.servers.yamlls = {
-      enable = true;
-    };
+    # TODO: remove if not needed
+    # lsp.servers.yamlls = {
+    #   enable = true;
+    # };
   };
 
-  extraPackages = with pkgs; [helm-ls];
-
   plugins.treesitter = {
-    grammarPackages = with config.plugins.treesitter.package.builtGrammars; [yaml];
+    grammarPackages = lib.attrValues {
+      inherit (config.plugins.treesitter.package.builtGrammars) yaml helm;
+    };
   };
 }
