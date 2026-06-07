@@ -41,9 +41,6 @@
       );
 
       forAllSystems = f: lib.genAttrs systems (system: f pkgsFor.${system});
-
-      modules = [
-      ];
     in
     {
       formatter = forAllSystems (pkgs: pkgs.nixfmt);
@@ -55,7 +52,6 @@
       };
 
       packages = forAllSystems (pkgs: {
-        lalilu = modules;
         default = nixvim.legacyPackages.${pkgs.stdenv.hostPlatform.system}.makeNixvimWithModule {
           inherit pkgs;
           module = {
