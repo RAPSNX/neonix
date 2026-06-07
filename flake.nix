@@ -44,6 +44,9 @@
     in
     {
       formatter = forAllSystems (pkgs: pkgs.nixfmt);
+
+      checks = forAllSystems (pkgs: import ./checks.nix { inherit pkgs self; });
+
       devShells = forAllSystems (pkgs: import ./devshell.nix { inherit pkgs pre-commit-hooks; });
 
       homeManagerModules = {
