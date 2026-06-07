@@ -1,0 +1,44 @@
+name: Update flake lock
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 5 * * 1"
+    - cron: "17 5 * * 4"
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: update-flake-lock
+  cancel-in-progress: false
+jobs:
+  update-flake-lock:
+    name: Update flake lock
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            accept-flake-config = true
+      - name: Cache Nix store
+        uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Update flake lock
+        run: nix flake update
+      - name: Compute PR date
+        id: pr-date
+        run: echo "date=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+      - name: Open pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: automation/update-flake-lock
+          github_token: ${{ secrets.GH_TOKEN }}
+          commit-message: "chore: update flake.lock"
+          title: "🧊 Nix Flake Update: ${{ steps.pr-date.outputs.date }}"
+          body: |
+            Automated update for `flake.lock` via `nix flake update`.
+          delete-branch: true
+          add-paths: |
+            flake.lock
