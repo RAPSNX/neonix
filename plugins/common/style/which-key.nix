@@ -38,11 +38,12 @@
         __unkeyed-numb = "<leader>d";
         desc = "Debug";
       }
-      # Hide some keymaps
       {
-        __unkeyed-numb = "<leader>h";
-        hidden = true;
+        __unkeyed-1 = "<leader>h";
+        group = "Hunk";
+        icon = "🩹";
       }
+      # Hide some keymaps
       {
         __unkeyed-numb = "<leader>j";
         hidden = true;
