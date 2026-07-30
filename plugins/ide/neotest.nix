@@ -20,6 +20,7 @@
 
   plugins.neotest = {
     enable = true;
+    settings.output.open_on_run = true;
   };
 
   keymaps = [
