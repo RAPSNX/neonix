@@ -76,12 +76,44 @@
   extraConfigLua =
     # lua
     ''
-       require("neotest").setup({
-         adapters = {
-           require("neotest-go"),
-           require("neotest-ginkgo"),
-         },
-       })
+      local neotest_go = require("neotest-go")
+      local neotest_ginkgo = require("neotest-ginkgo")
+
+      -- neotest-go and neotest-ginkgo both match any "*_test.go" file on their own
+      -- (neither is aware of the other), so neotest's single-owner-per-file
+      -- resolution effectively picks between them by undefined table iteration
+      -- order. Make it deterministic: a spec file belongs to neotest-ginkgo only
+      -- when its package has a Ginkgo suite bootstrap file; neotest-go keeps
+      -- everything else, including that bootstrap file itself (it has a real
+      -- `func Test...(t *testing.T)`).
+      local ginkgo_is_test_file = neotest_ginkgo.is_test_file
+      neotest_ginkgo.is_test_file = function(file_path)
+        if not ginkgo_is_test_file(file_path) then
+          return false
+        end
+        -- Use vim.fs (backed by libuv) rather than vim.fn.fnamemodify/readdir:
+        -- this runs inside neotest's async discovery coroutines, where
+        -- VimL-calling vim.fn.* functions silently break the coroutine.
+        local dir = vim.fs.dirname(file_path)
+        for name, type_ in vim.fs.dir(dir) do
+          if type_ == "file" and (name == "suite_test.go" or vim.endswith(name, "_suite_test.go")) then
+            return true
+          end
+        end
+        return false
+      end
+
+      local go_is_test_file = neotest_go.is_test_file
+      neotest_go.is_test_file = function(file_path)
+        return go_is_test_file(file_path) and not neotest_ginkgo.is_test_file(file_path)
+      end
+
+      require("neotest").setup({
+        adapters = {
+          neotest_go,
+          neotest_ginkgo,
+        },
+      })
 
       -- Make q to quit floating windows
       vim.keymap.set('n', 'q', function()
