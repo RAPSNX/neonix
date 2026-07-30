@@ -17,7 +17,12 @@ With great power comes great responsiblity, to remember the power of `neovim` he
 | `<leader>,`   | horizontal split                          |
 | `<leader>c`   | Select system clipboard                   |
 | `<leader>T`   | Toggle termimal                           |
-| `<leader>t`   | Toggle test summary                       |
+| `<leader>tt`  | Run nearest test                          |
+| `<leader>tf`  | Run current file's tests                  |
+| `<leader>td`  | Run whole test suite                      |
+| `<leader>tD`  | Debug nearest test                        |
+| `<leader>ts`  | Toggle test summary                       |
+| `<leader>to`  | Toggle test output panel                  |
 | `<leader>dc`  | Start/Continue debugging                  |
 | `K`           | Toggle `lsp_signature`                    |
 | `L`           | Toggle `lsp_diagnostic: hover`            |
