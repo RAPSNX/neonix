@@ -24,6 +24,13 @@ With great power comes great responsiblity, to remember the power of `neovim` he
 | `<leader>ts`  | Toggle test summary                       |
 | `<leader>to`  | Toggle test output panel                  |
 | `<leader>dc`  | Start/Continue debugging                  |
+| `<leader>gd`  | Open diff view                            |
+| `<leader>gD`  | Close diff view                           |
+| `]h` / `[h`   | Next/previous git hunk                    |
+| `<leader>hs`  | Stage hunk                                |
+| `<leader>hr`  | Reset hunk                                |
+| `<leader>hp`  | Preview hunk                              |
+| `<leader>hb`  | Toggle line blame                         |
 | `K`           | Toggle `lsp_signature`                    |
 | `L`           | Toggle `lsp_diagnostic: hover`            |
 | `gcc`         | Toggle comment                            |
