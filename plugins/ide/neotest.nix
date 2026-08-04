@@ -104,7 +104,16 @@
         local stat = vim.uv.fs_fstat(fd)
         local content = stat and vim.uv.fs_read(fd, stat.size, 0) or ""
         vim.uv.fs_close(fd)
-        return content:find("onsi/ginkgo", 1, true) ~= nil
+        -- Match only actual import specs (optional alias, then a bare quoted
+        -- path filling the whole line), not any occurrence of the substring
+        -- "onsi/ginkgo" -- e.g. in a comment, doc string, or fixture literal.
+        for line in content:gmatch("[^\n]+") do
+          local import_path = line:match('^%s*[%w_.]*%s*"([^"]+)"%s*$')
+          if import_path and import_path:find("onsi/ginkgo", 1, true) then
+            return true
+          end
+        end
+        return false
       end
 
       local go_is_test_file = neotest_go.is_test_file
