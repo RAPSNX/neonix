@@ -20,7 +20,6 @@
 
   plugins.neotest = {
     enable = true;
-    settings.output.open_on_run = true;
   };
 
   keymaps = [
@@ -104,11 +103,24 @@
         local stat = vim.uv.fs_fstat(fd)
         local content = stat and vim.uv.fs_read(fd, stat.size, 0) or ""
         vim.uv.fs_close(fd)
-        -- Match only actual import specs (optional alias, then a bare quoted
-        -- path filling the whole line), not any occurrence of the substring
-        -- "onsi/ginkgo" -- e.g. in a comment, doc string, or fixture literal.
+        -- Track the actual `import (...)` block (or a single-line `import
+        -- "..."`) rather than matching a bare quoted line anywhere in the
+        -- file: a raw string fixture or a quoted function argument on its
+        -- own line could otherwise look exactly like an import spec.
+        local in_import_block = false
         for line in content:gmatch("[^\n]+") do
-          local import_path = line:match('^%s*[%w_.]*%s*"([^"]+)"%s*$')
+          local import_path
+          if in_import_block then
+            if line:match("^%s*%)%s*$") then
+              in_import_block = false
+            else
+              import_path = line:match('^%s*[%w_.]*%s*"([^"]+)"%s*$')
+            end
+          elseif line:match("^import%s*%(%s*$") then
+            in_import_block = true
+          else
+            import_path = line:match('^import%s+[%w_.]*%s*"([^"]+)"%s*$')
+          end
           if import_path and import_path:find("onsi/ginkgo", 1, true) then
             return true
           end
@@ -121,7 +133,15 @@
         return go_is_test_file(file_path) and not neotest_ginkgo.is_test_file(file_path)
       end
 
+      -- neotest.setup() rebuilds its config from scratch on every call
+      -- (vim.tbl_deep_extend("force", default_config, config) -- it does not
+      -- merge with whatever a prior setup() call already applied), so every
+      -- option this config cares about must be set together in this one,
+      -- final call rather than split across plugins.neotest.settings and here.
       require("neotest").setup({
+        output = {
+          open_on_run = true,
+        },
         adapters = {
           neotest_go,
           neotest_ginkgo,
