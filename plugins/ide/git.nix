@@ -44,10 +44,18 @@
       options = {
         desc = "Stage hunk";
       };
-      mode = [
-        "n"
-        "v"
-      ];
+      mode = [ "n" ];
+    }
+    {
+      # <cmd> keeps the mapping in Visual mode, so line('.')/line('v') still
+      # reflect the current selection instead of leaving it and reading it
+      # back from the '< / '> marks.
+      action = "<cmd>lua require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })<CR>";
+      key = "<leader>hs";
+      options = {
+        desc = "Stage selected lines";
+      };
+      mode = [ "v" ];
     }
     {
       action = "<cmd>lua require('gitsigns').reset_hunk()<CR>";
@@ -55,10 +63,15 @@
       options = {
         desc = "Reset hunk";
       };
-      mode = [
-        "n"
-        "v"
-      ];
+      mode = [ "n" ];
+    }
+    {
+      action = "<cmd>lua require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })<CR>";
+      key = "<leader>hr";
+      options = {
+        desc = "Reset selected lines";
+      };
+      mode = [ "v" ];
     }
     {
       action = "<cmd>lua require('gitsigns').preview_hunk()<CR>";
