@@ -83,25 +83,28 @@
       -- neotest-go and neotest-ginkgo both match any "*_test.go" file on their own
       -- (neither is aware of the other), so neotest's single-owner-per-file
       -- resolution effectively picks between them by undefined table iteration
-      -- order. Make it deterministic: a spec file belongs to neotest-ginkgo only
-      -- when its package has a Ginkgo suite bootstrap file; neotest-go keeps
-      -- everything else, including that bootstrap file itself (it has a real
-      -- `func Test...(t *testing.T)`).
+      -- order. Make it deterministic based on the file's own content: a file
+      -- belongs to neotest-ginkgo only if it actually imports ginkgo, so plain
+      -- `func Test...(t *testing.T)` files living alongside Ginkgo specs stay
+      -- with neotest-go instead of silently disappearing from both adapters
+      -- (the suite bootstrap file is already excluded by neotest-ginkgo's own
+      -- is_test_file, since it's named "*_suite_test.go").
       local ginkgo_is_test_file = neotest_ginkgo.is_test_file
       neotest_ginkgo.is_test_file = function(file_path)
         if not ginkgo_is_test_file(file_path) then
           return false
         end
-        -- Use vim.fs (backed by libuv) rather than vim.fn.fnamemodify/readdir:
-        -- this runs inside neotest's async discovery coroutines, where
-        -- VimL-calling vim.fn.* functions silently break the coroutine.
-        local dir = vim.fs.dirname(file_path)
-        for name, type_ in vim.fs.dir(dir) do
-          if type_ == "file" and (name == "suite_test.go" or vim.endswith(name, "_suite_test.go")) then
-            return true
-          end
+        -- Use vim.uv (backed by libuv) rather than vim.fn.readfile: this runs
+        -- inside neotest's async discovery coroutines, where VimL-calling
+        -- vim.fn.* functions silently break the coroutine.
+        local fd = vim.uv.fs_open(file_path, "r", 438)
+        if not fd then
+          return false
         end
-        return false
+        local stat = vim.uv.fs_fstat(fd)
+        local content = stat and vim.uv.fs_read(fd, stat.size, 0) or ""
+        vim.uv.fs_close(fd)
+        return content:find("onsi/ginkgo", 1, true) ~= nil
       end
 
       local go_is_test_file = neotest_go.is_test_file
