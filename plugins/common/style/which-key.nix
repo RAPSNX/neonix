@@ -52,8 +52,9 @@
         hidden = true;
       }
       {
-        __unkeyed-numb = "<leader>l";
-        hidden = true;
+        __unkeyed-1 = "<leader>l";
+        group = "Lint";
+        icon = "🔍";
       }
     ];
   };

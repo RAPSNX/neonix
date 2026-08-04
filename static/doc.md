@@ -18,6 +18,7 @@ With great power comes great responsiblity, to remember the power of `neovim` he
 | `<leader>c`   | Select system clipboard                   |
 | `<leader>T`   | Toggle termimal                           |
 | `<leader>t`   | Toggle test summary                       |
+| `<leader>ll`  | Lint buffer                               |
 | `<leader>dc`  | Start/Continue debugging                  |
 | `K`           | Toggle `lsp_signature`                    |
 | `L`           | Toggle `lsp_diagnostic: hover`            |
