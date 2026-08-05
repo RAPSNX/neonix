@@ -103,29 +103,10 @@
         local stat = vim.uv.fs_fstat(fd)
         local content = stat and vim.uv.fs_read(fd, stat.size, 0) or ""
         vim.uv.fs_close(fd)
-        -- Track the actual `import (...)` block (or a single-line `import
-        -- "..."`) rather than matching a bare quoted line anywhere in the
-        -- file: a raw string fixture or a quoted function argument on its
-        -- own line could otherwise look exactly like an import spec.
-        local in_import_block = false
-        for line in content:gmatch("[^\n]+") do
-          local import_path
-          if in_import_block then
-            if line:match("^%s*%)%s*$") then
-              in_import_block = false
-            else
-              import_path = line:match('^%s*[%w_.]*%s*"([^"]+)"%s*$')
-            end
-          elseif line:match("^import%s*%(%s*$") then
-            in_import_block = true
-          else
-            import_path = line:match('^import%s+[%w_.]*%s*"([^"]+)"%s*$')
-          end
-          if import_path and import_path:find("onsi/ginkgo", 1, true) then
-            return true
-          end
-        end
-        return false
+        -- neotest-ginkgo's filter_dir already restricts scanning to
+        -- directories that contain a Ginkgo suite file, so a plain
+        -- substring check is enough here without parsing imports.
+        return content:find("onsi/ginkgo", 1, true) ~= nil
       end
 
       local go_is_test_file = neotest_go.is_test_file
