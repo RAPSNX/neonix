@@ -23,6 +23,7 @@ With great power comes great responsiblity, to remember the power of `neovim` he
 | `<leader>tD`  | Debug nearest test                        |
 | `<leader>ts`  | Toggle test summary                       |
 | `<leader>to`  | Toggle test output panel                  |
+| `<leader>ll`  | Lint buffer                               |
 | `<leader>dc`  | Start/Continue debugging                  |
 | `<leader>gd`  | Open diff view                            |
 | `<leader>gD`  | Close diff view                           |

@@ -15,7 +15,7 @@
   plugins = {
     lint = {
       enable = true;
-      lintersByFt.go = [ "golangci_lint" ];
+      lintersByFt.go = [ "golangcilint" ];
     };
 
     lsp.servers.gopls = {

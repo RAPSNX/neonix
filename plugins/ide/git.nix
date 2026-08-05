@@ -3,7 +3,6 @@
   plugins.gitsigns.enable = true;
 
   keymaps = [
-    # diffview.nvim - large side-by-side review
     {
       action = "<cmd>DiffviewOpen<CR>";
       key = "<leader>gd";
@@ -21,7 +20,6 @@
       mode = [ "n" ];
     }
 
-    # gitsigns.nvim - hunk-level fixes inside files
     {
       action = "<cmd>lua require('gitsigns').nav_hunk('next')<CR>";
       key = "]h";
@@ -47,9 +45,6 @@
       mode = [ "n" ];
     }
     {
-      # <cmd> keeps the mapping in Visual mode, so line('.')/line('v') still
-      # reflect the current selection instead of leaving it and reading it
-      # back from the '< / '> marks.
       action = "<cmd>lua require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })<CR>";
       key = "<leader>hs";
       options = {
