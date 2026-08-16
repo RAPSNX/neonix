@@ -27,12 +27,8 @@ With great power comes great responsiblity, to remember the power of `neovim` he
 | `<leader>dc`  | Start/Continue debugging                  |
 | `<leader>gd`  | Open diff view                            |
 | `<leader>gD`  | Close diff view                           |
-| `]h` / `[h`   | Next/previous git hunk                    |
-| `<leader>hs`  | Stage hunk                                |
-| `<leader>hr`  | Reset hunk                                |
-| `<leader>hp`  | Preview hunk                              |
-| `<leader>hb`  | Toggle line blame                         |
-| `<leader>hB`  | Show file blame                           |
+| `<leader>gb`  | Toggle line blame                         |
+| `<leader>gB`  | Toggle file blame                         |
 | `K`           | Toggle `lsp_signature`                    |
 | `L`           | Toggle `lsp_diagnostic: hover`            |
 | `gcc`         | Toggle comment                            |
