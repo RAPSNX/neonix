@@ -40,7 +40,7 @@
       }
       {
         __unkeyed-1 = "<leader>h";
-        group = "Hunk";
+        group = "Blame";
         icon = "🩹";
       }
       # Hide some keymaps

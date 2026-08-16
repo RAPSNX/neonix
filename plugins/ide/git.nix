@@ -31,62 +31,6 @@
     }
 
     {
-      action = "<cmd>lua require('gitsigns').nav_hunk('next')<CR>";
-      key = "]h";
-      options = {
-        desc = "Next git hunk";
-      };
-      mode = [ "n" ];
-    }
-    {
-      action = "<cmd>lua require('gitsigns').nav_hunk('prev')<CR>";
-      key = "[h";
-      options = {
-        desc = "Previous git hunk";
-      };
-      mode = [ "n" ];
-    }
-    {
-      action = "<cmd>lua require('gitsigns').stage_hunk()<CR>";
-      key = "<leader>hs";
-      options = {
-        desc = "Stage hunk";
-      };
-      mode = [ "n" ];
-    }
-    {
-      action = "<cmd>lua require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })<CR>";
-      key = "<leader>hs";
-      options = {
-        desc = "Stage selected lines";
-      };
-      mode = [ "v" ];
-    }
-    {
-      action = "<cmd>lua require('gitsigns').reset_hunk()<CR>";
-      key = "<leader>hr";
-      options = {
-        desc = "Reset hunk";
-      };
-      mode = [ "n" ];
-    }
-    {
-      action = "<cmd>lua require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })<CR>";
-      key = "<leader>hr";
-      options = {
-        desc = "Reset selected lines";
-      };
-      mode = [ "v" ];
-    }
-    {
-      action = "<cmd>lua require('gitsigns').preview_hunk()<CR>";
-      key = "<leader>hp";
-      options = {
-        desc = "Preview hunk";
-      };
-      mode = [ "n" ];
-    }
-    {
       action = "<cmd>lua require('gitsigns').toggle_current_line_blame()<CR>";
       key = "<leader>hb";
       options = {
@@ -95,10 +39,21 @@
       mode = [ "n" ];
     }
     {
-      action = "<cmd>lua require('gitsigns').blame()<CR>";
+      action.__raw = ''
+        function()
+          for _, win in ipairs(vim.api.nvim_list_wins()) do
+            local buf = vim.api.nvim_win_get_buf(win)
+            if vim.bo[buf].filetype == "gitsigns-blame" then
+              vim.api.nvim_win_close(win, true)
+              return
+            end
+          end
+          require("gitsigns").blame()
+        end
+      '';
       key = "<leader>hB";
       options = {
-        desc = "Show file blame";
+        desc = "Toggle file blame";
       };
       mode = [ "n" ];
     }
