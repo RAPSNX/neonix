@@ -102,13 +102,16 @@
             else
               import_path = line:match("^%s*[%w_.]*%s*\"([^\"]+)\"")
             end
-          elseif line:match("^%s*import%s*%(%s*$") then
+          elseif line:match("^%s*import%s*%(%s*$") or line:match("^%s*import%s*%(%s*//") then
             in_import_block = true
           else
             import_path = line:match("^%s*import%s+[%w_.]*%s*\"([^\"]+)\"")
           end
 
-          if import_path and import_path:find("onsi/ginkgo", 1, true) then
+          if
+            import_path
+            and (import_path == "github.com/onsi/ginkgo" or import_path == "github.com/onsi/ginkgo/v2")
+          then
             return true
           end
         end
