@@ -13,6 +13,11 @@
     };
 
     import-tree.url = "github:vic/import-tree";
+
+    neotest-ginkgo = {
+      url = "github:nvim-contrib/neotest-ginkgo";
+      flake = false;
+    };
   };
 
   outputs =

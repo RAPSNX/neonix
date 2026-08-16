@@ -52,6 +52,22 @@
         "type": "github"
       }
     },
+    "neotest-ginkgo": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785120781,
+        "narHash": "sha256-Fv9hlGnjvRaC51CCcVauAnyRjfDNO65LdKVmpTO2FEo=",
+        "owner": "nvim-contrib",
+        "repo": "neotest-ginkgo",
+        "rev": "be7ed5c1a1de365f31270e1ef55cb801da641701",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nvim-contrib",
+        "repo": "neotest-ginkgo",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1786514691,
@@ -114,6 +130,7 @@
     "root": {
       "inputs": {
         "import-tree": "import-tree",
+        "neotest-ginkgo": "neotest-ginkgo",
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim",
         "pre-commit-hooks": "pre-commit-hooks"
