@@ -6,6 +6,14 @@
   diagnostic.settings = {
     update_in_insert = true;
     virtual_text = true;
+    signs.text.__raw = ''
+      {
+        [vim.diagnostic.severity.ERROR] = "❌",
+        [vim.diagnostic.severity.WARN] = "🚧",
+        [vim.diagnostic.severity.HINT] = "💡",
+        [vim.diagnostic.severity.INFO] = " ",
+      }
+    '';
   };
 
   keymaps = [
@@ -42,13 +50,6 @@
   ];
 
   extraConfigLua = ''
-    -- diagnostic signs
-    local signs = { Error = "❌", Warn = "🚧", Hint = "💡", Info = " " }
-    for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl= hl, numhl = hl })
-    end
-
     -- toggle virtual_text & relativenumber
     vim.keymap.set("n", "<leader>sd", function()
         isLspDiagnosticsVisible = not isLspDiagnosticsVisible
