@@ -7,8 +7,8 @@
       lazygit = {
         enable = true;
         config.os = {
-          edit = ''[ -z "$NVIM" ] && (nvim -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote-send "<C-\><C-N>:NeonixLazygitEdit {{filename}}<CR>")'';
-          editAtLine = ''[ -z "$NVIM" ] && (nvim +{{line}} -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote-send "<C-\><C-N>:{{line}}NeonixLazygitEdit {{filename}}<CR>")'';
+          edit = ''f="$(git rev-parse --show-toplevel)/{{filename}}"; [ -z "$NVIM" ] && (nvim -- "$f") || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote-send "<C-\><C-N>:NeonixLazygitEdit $f<CR>")'';
+          editAtLine = ''f="$(git rev-parse --show-toplevel)/{{filename}}"; [ -z "$NVIM" ] && (nvim +{{line}} -- "$f") || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote-send "<C-\><C-N>:{{line}}NeonixLazygitEdit $f<CR>")'';
         };
       };
       notifier.enabled = true;
