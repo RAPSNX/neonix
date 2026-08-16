@@ -38,11 +38,6 @@
         __unkeyed-numb = "<leader>d";
         desc = "Debug";
       }
-      {
-        __unkeyed-1 = "<leader>h";
-        group = "Blame";
-        icon = "🩹";
-      }
       # Hide some keymaps
       {
         __unkeyed-numb = "<leader>j";

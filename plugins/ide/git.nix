@@ -32,7 +32,7 @@
 
     {
       action = "<cmd>lua require('gitsigns').toggle_current_line_blame()<CR>";
-      key = "<leader>hb";
+      key = "<leader>gb";
       options = {
         desc = "Toggle line blame";
       };
@@ -51,7 +51,7 @@
           require("gitsigns").blame()
         end
       '';
-      key = "<leader>hB";
+      key = "<leader>gB";
       options = {
         desc = "Toggle file blame";
       };
