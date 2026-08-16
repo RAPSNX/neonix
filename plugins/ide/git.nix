@@ -84,5 +84,13 @@
       };
       mode = [ "n" ];
     }
+    {
+      action = "<cmd>lua require('gitsigns').blame()<CR>";
+      key = "<leader>hB";
+      options = {
+        desc = "Show file blame";
+      };
+      mode = [ "n" ];
+    }
   ];
 }

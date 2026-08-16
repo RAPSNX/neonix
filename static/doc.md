@@ -32,6 +32,7 @@ With great power comes great responsiblity, to remember the power of `neovim` he
 | `<leader>hr`  | Reset hunk                                |
 | `<leader>hp`  | Preview hunk                              |
 | `<leader>hb`  | Toggle line blame                         |
+| `<leader>hB`  | Show file blame                           |
 | `K`           | Toggle `lsp_signature`                    |
 | `L`           | Toggle `lsp_diagnostic: hover`            |
 | `gcc`         | Toggle comment                            |
