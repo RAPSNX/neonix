@@ -3,14 +3,21 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   extraPackages = with pkgs; [
     go
     gopls
     delve
+    golangci-lint
   ];
 
   plugins = {
+    lint = {
+      enable = true;
+      lintersByFt.go = [ "golangcilint" ];
+    };
+
     lsp.servers.gopls = {
       enable = true;
 
@@ -48,7 +55,7 @@
     conform-nvim = {
       settings = {
         formatters_by_ft = {
-          go = ["goimports"];
+          go = [ "goimports" ];
         };
 
         formatters = {
@@ -60,6 +67,17 @@
     };
   };
   plugins.treesitter = {
-    grammarPackages = with config.plugins.treesitter.package.builtGrammars; [go];
+    grammarPackages = with config.plugins.treesitter.package.builtGrammars; [ go ];
   };
+
+  keymaps = [
+    {
+      action = ''<cmd>lua require("lint").try_lint()<CR>'';
+      key = "<leader>ll";
+      options = {
+        desc = "Lint buffer";
+      };
+      mode = [ "n" ];
+    }
+  ];
 }
