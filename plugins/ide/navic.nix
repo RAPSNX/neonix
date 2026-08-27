@@ -3,7 +3,7 @@
     enable = true;
     settings = {
       lsp.auto_attach = true;
-      separator = " → ";
+      separator = "  ";
       depth_limit_indicator = "..";
     };
 

@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   extraPackages = with pkgs; [
     ripgrep
     fd
@@ -18,7 +18,7 @@
           hidden = true;
         };
         live_grep = {
-          additional_args = ["--follow"];
+          additional_args = [ "--follow" ];
         };
       };
 
@@ -91,7 +91,10 @@
       {
         __unkeyed-1 = "<leader>f";
         group = "Search";
-        icon = "🔎";
+        icon = {
+          icon = "󰍉";
+          color = "blue";
+        };
       }
     ];
   };

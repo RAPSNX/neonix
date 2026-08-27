@@ -6,11 +6,11 @@
       signs = {
         dapBreakpoint = {
           text = " ";
-          texthl = "DiagnosticInfo";
+          texthl = "DiagnosticError";
         };
         dapBreakpointCondition = {
           text = " ";
-          texthl = "DiagnosticInfo";
+          texthl = "DiagnosticWarn";
         };
         dapBreakpointRejected = {
           text = " ";

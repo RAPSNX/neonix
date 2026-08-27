@@ -5,7 +5,7 @@
       options = {
         globalstatus = true;
         icons_enabled = true;
-        theme = "catppuccin";
+        theme = "catppuccin-mocha";
         section_separators = {
           right = "";
           left = "";
@@ -51,45 +51,57 @@
               left = 2;
               right = 0;
             };
-            icon = "";
-            colored = false;
+            icon = "";
+            colored = true;
             color = {
               gui = "bold";
-              fg = "#605f6f";
+              fg = "#fab387";
             };
           }
           {
             __unkeyed-1 = "diff";
-            colored = false;
-            color = {
-              gui = "bold";
-              fg = "#605f6f";
+            colored = true;
+            diff_color = {
+              added = {
+                fg = "#a6e3a1";
+              };
+              modified = {
+                fg = "#fab387";
+              };
+              removed = {
+                fg = "#f38ba8";
+              };
             };
             symbols = {
-              added = " ";
-              modified = " ";
-              removed = " ";
+              added = " ";
+              modified = "󰝤 ";
+              removed = " ";
             };
           }
         ];
         lualine_x = [
           {
             __unkeyed-1 = "diagnostics";
-            color = {
-              fg = "#605f6f";
-              gui = "bold";
-            };
+            colored = true;
             diagnostics_color = {
               color_error = {
-                fg = "#F38BA8";
+                fg = "#f38ba8";
               };
               color_warn = {
-                fg = "#FAE3B0";
+                fg = "#f9e2af";
+              };
+              color_info = {
+                fg = "#89b4fa";
+              };
+              color_hint = {
+                fg = "#94e2d5";
               };
             };
             symbols = {
               error = " ";
               warn = " ";
+              info = " ";
+              hint = "󰌶 ";
             };
           }
           {
@@ -116,9 +128,9 @@
               # lua
               ''
                 function()
-                    local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
-                    local clients = vim.lsp.get_clients()
-                    if next(clients) == nil then
+                    local buf_ft = vim.bo.filetype
+                    local clients = vim.lsp.get_clients({ bufnr = 0 })
+                    if #clients == 0 then
                         return "None"
                     end
 
@@ -130,7 +142,7 @@
                         end
                     end
 
-                    if msg then
+                    if msg ~= "" then
                       return msg
                     else
                       return "None"

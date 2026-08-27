@@ -3,12 +3,21 @@
   plugins.gitsigns = {
     enable = true;
     settings.signs = {
-      add.text = "➕";
-      change.text = "🔄";
-      delete.text = "➖";
-      topdelete.text = "🔼";
-      changedelete.text = "🔀";
-      untracked.text = "❔";
+      add.text = "▎";
+      change.text = "▎";
+      delete = {
+        text = "";
+        show_count = true;
+      };
+      topdelete = {
+        text = "";
+        show_count = true;
+      };
+      changedelete = {
+        text = "▎";
+        show_count = true;
+      };
+      untracked.text = "┆";
     };
   };
 
@@ -26,6 +35,22 @@
       key = "<leader>gD";
       options = {
         desc = "Close diff view";
+      };
+      mode = [ "n" ];
+    }
+    {
+      action = "<cmd>lua require('gitsigns').preview_hunk()<CR>";
+      key = "<leader>gp";
+      options = {
+        desc = "Preview hunk";
+      };
+      mode = [ "n" ];
+    }
+    {
+      action = "<cmd>lua require('gitsigns').toggle_deleted()<CR>";
+      key = "<leader>gu";
+      options = {
+        desc = "Toggle deleted lines";
       };
       mode = [ "n" ];
     }

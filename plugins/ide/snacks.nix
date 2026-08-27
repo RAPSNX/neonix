@@ -62,7 +62,10 @@
     {
       __unkeyed-1 = "<leader>g";
       group = "Git";
-      icon = "🐈";
+      icon = {
+        icon = "";
+        color = "orange";
+      };
     }
   ];
 }

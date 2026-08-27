@@ -7,7 +7,7 @@
       action = ''<cmd>lua require("spectre").toggle()<CR>'';
       key = "<leader>S";
       options = {
-        desc = "Open LazyGit";
+        desc = "Toggle Spectre (Search & Replace)";
       };
       mode = [ "n" ];
     }

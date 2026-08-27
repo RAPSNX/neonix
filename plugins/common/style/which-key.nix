@@ -20,23 +20,98 @@
       {
         __unkeyed-diag = "<leader>sd";
         desc = "Toggle virtual text";
+        icon = {
+          icon = "󰅚";
+          color = "cyan";
+        };
       }
       {
         __unkeyed-numb = "<leader>sn";
         desc = "Toggle relativenumber";
+        icon = {
+          icon = "󰋽";
+          color = "yellow";
+        };
       }
       {
         __unkeyed-numb = "<leader>s";
-        desc = "Style";
-        icon = "💄";
+        group = "Style";
+        icon = {
+          icon = "";
+          color = "purple";
+        };
       }
       {
         __unkeyed-numb = "<leader>r";
-        desc = "Refactor";
+        group = "Refactor";
+        icon = {
+          icon = "󰑕";
+          color = "yellow";
+        };
       }
       {
         __unkeyed-numb = "<leader>d";
-        desc = "Debug";
+        group = "Debug";
+        icon = {
+          icon = "";
+          color = "red";
+        };
+      }
+      {
+        __unkeyed-numb = "<leader>t";
+        group = "Test";
+        icon = {
+          icon = "󰙨";
+          color = "green";
+        };
+      }
+      {
+        __unkeyed-numb = "<leader>e";
+        desc = "Open File Tree";
+        icon = {
+          icon = "󰉓";
+          color = "azure";
+        };
+      }
+      {
+        __unkeyed-numb = "<leader>T";
+        desc = "Toggle Terminal";
+        icon = {
+          icon = "";
+          color = "green";
+        };
+      }
+      {
+        __unkeyed-numb = "<leader>S";
+        desc = "Toggle Spectre";
+        icon = {
+          icon = "󰛔";
+          color = "yellow";
+        };
+      }
+      {
+        __unkeyed-numb = "<leader>c";
+        desc = "System clipboard";
+        icon = {
+          icon = "󰅌";
+          color = "blue";
+        };
+      }
+      {
+        __unkeyed-numb = "<leader>q";
+        desc = "Close quickfix";
+        icon = {
+          icon = "󰅖";
+          color = "red";
+        };
+      }
+      {
+        __unkeyed-numb = "<leader><space>";
+        desc = "Find buffer";
+        icon = {
+          icon = "󱔗";
+          color = "purple";
+        };
       }
       # Hide some keymaps
       {
@@ -50,7 +125,10 @@
       {
         __unkeyed-1 = "<leader>l";
         group = "Lint";
-        icon = "🔍";
+        icon = {
+          icon = "󰁨";
+          color = "cyan";
+        };
       }
     ];
   };
