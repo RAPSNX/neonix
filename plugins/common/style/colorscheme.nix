@@ -4,13 +4,32 @@
     settings = {
       flavour = "mocha";
       integrations = {
-        alpha = true;
-        cmp = false;
-        dashboard = true;
+        blink_cmp = true;
+        diffview = true;
+        gitsigns = true;
         illuminate.enabled = true;
         mini.enabled = true;
-        telescope.enabled = true;
+        native_lsp = {
+          enabled = true;
+          virtual_text = {
+            errors = [ "italic" ];
+            hints = [ "italic" ];
+            warnings = [ "italic" ];
+            information = [ "italic" ];
+          };
+          underlines = {
+            errors = [ "underline" ];
+            hints = [ "underline" ];
+            warnings = [ "underline" ];
+            information = [ "underline" ];
+          };
+        };
         navic.enabled = true;
+        neotest = true;
+        snacks = true;
+        telescope.enabled = true;
+        treesitter = true;
+        which_key = true;
       };
     };
   };

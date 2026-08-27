@@ -51,6 +51,7 @@
 
   extraConfigLua = ''
     -- toggle virtual_text & relativenumber
+    local isLspDiagnosticsVisible = true
     vim.keymap.set("n", "<leader>sd", function()
         isLspDiagnosticsVisible = not isLspDiagnosticsVisible
         vim.diagnostic.config({

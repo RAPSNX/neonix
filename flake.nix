@@ -78,8 +78,29 @@
           module = {
             imports = [
               (inputs.import-tree ./config)
-              (inputs.import-tree ./plugins/common)
+              ./plugins/common/explorer/mini.nix
+              ./plugins/common/explorer/oil.nix
+              ./plugins/common/lsp/better-escape.nix
+              ./plugins/common/lsp/treesitter.nix
+              ./plugins/common/style/lualine.nix
+              ./plugins/common/style/which-key.nix
             ];
+            colorschemes.catppuccin = {
+              enable = true;
+              settings = {
+                flavour = "mocha";
+                integrations = {
+                  mini.enabled = true;
+                  treesitter = true;
+                  which_key = true;
+                };
+              };
+            };
+            plugins = {
+              web-devicons.enable = true;
+              nvim-autopairs.enable = true;
+              nvim-surround.enable = true;
+            };
           };
           # You can use `extraSpecialArgs` to pass additional arguments to your module files
           extraSpecialArgs = {

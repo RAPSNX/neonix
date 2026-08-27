@@ -5,7 +5,43 @@
   ...
 }:
 {
+  extraPlugins = [
+    pkgs.vimPlugins.vim-helm
+  ];
+
+  extraPackages = with pkgs; [
+    helm-ls
+    yaml-language-server
+  ];
+
   plugins = {
+    lsp.servers = {
+      yamlls = {
+        enable = true;
+        extraOptions.settings = {
+          yaml = {
+            schemas = {
+              kubernetes = "*.k8s.yaml";
+              "http://json.schemastore.org/kustomization" = "kustomization.yaml";
+              "http://json.schemastore.org/chart" = "Chart.yaml";
+            };
+            validate = true;
+          };
+        };
+      };
+
+      helm_ls = {
+        enable = true;
+        extraOptions.settings = {
+          "helm-ls" = {
+            yamlls = {
+              enabled = false;
+            };
+          };
+        };
+      };
+    };
+
     conform-nvim = {
       settings = {
         formatters_by_ft = {
@@ -18,15 +54,38 @@
         };
       };
     };
-    # TODO: remove if not needed
-    # lsp.servers.yamlls = {
-    #   enable = true;
-    # };
   };
 
   plugins.treesitter = {
     grammarPackages = lib.attrValues {
-      inherit (config.plugins.treesitter.package.builtGrammars) yaml helm;
+      inherit (config.plugins.treesitter.package.builtGrammars) yaml helm gotmpl;
     };
   };
+
+  extraConfigLua = ''
+    vim.filetype.add({
+      extension = {
+        gotmpl = "gotmpl",
+        helm = "helm",
+      },
+      pattern = {
+        [".*/templates/.*%.ya?ml"] = "helm",
+        [".*/templates/.*%.tpl"] = "helm",
+        [".*%.ya?ml%.gotmpl"] = "helm",
+        ["helmfile.*%.ya?ml"] = "helm",
+        [".*%.ya?ml"] = function(path, bufnr)
+          -- Fast in-memory check (only runs once upon opening a file)
+          if bufnr and bufnr > 0 then
+            local lines = vim.api.nvim_buf_get_lines(bufnr, 0, 100, false)
+            for _, line in ipairs(lines) do
+              if line:find("{{", 1, true) then
+                return "helm"
+              end
+            end
+          end
+          return "yaml"
+        end,
+      },
+    })
+  '';
 }

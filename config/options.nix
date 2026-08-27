@@ -19,7 +19,7 @@
   };
 
   opts = {
-    sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions";
+    sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal";
     completeopt = "menuone,noinsert,noselect";
 
     spelllang = "en";
@@ -31,6 +31,7 @@
 
     # search
     ignorecase = true; # ignores case in search
+    smartcase = true;
     tabstop = 4;
     softtabstop = 4;
     shiftwidth = 4;
@@ -53,11 +54,6 @@
 
     signcolumn = "yes";
     cmdheight = 1;
-    cot = [
-      "menu"
-      "menuone"
-      "noselect"
-    ];
     colorcolumn = "120";
 
     foldenable = true;

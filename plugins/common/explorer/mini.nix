@@ -1,4 +1,4 @@
-{lib, ...}: {
+{ lib, ... }: {
   plugins.mini = {
     enable = true;
     modules = {
@@ -14,12 +14,12 @@
         items = [
           {
             name = "Find File";
-            action = "Telescope find_files follow=true no_ignore=true hidden=true";
+            action = "lua if pcall(require, 'telescope.builtin') then require('telescope.builtin').find_files({follow=true, hidden=true}) else require('mini.files').open() end";
             section = "";
           }
           {
             name = "Recent File";
-            action = "Telescope oldfiles";
+            action = "lua if pcall(require, 'telescope.builtin') then require('telescope.builtin').oldfiles() else vim.cmd('browse oldfiles') end";
             section = "";
           }
           {
@@ -31,8 +31,8 @@
         footer = "I use NIX btw. -- RAPSN";
       };
 
-      files = {}; # mini file explorer
-      comment = {}; # toggle comments
+      files = { }; # mini file explorer
+      comment = { }; # toggle comments
     };
   };
 
@@ -44,7 +44,7 @@
       options = {
         desc = "Open File Tree";
       };
-      mode = ["n"];
+      mode = [ "n" ];
     }
   ];
 }
