@@ -3,18 +3,39 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   plugins = {
     lsp.servers.rust_analyzer = {
       enable = true;
       installCargo = true;
       installRustc = true;
+      extraOptions.settings = {
+        "rust-analyzer" = {
+          checkOnSave = {
+            command = "clippy";
+          };
+          procMacro = {
+            enable = true;
+          };
+          cargo = {
+            loadOutDirsFromCheck = true;
+          };
+          files = {
+            excludeDirs = [
+              ".direnv"
+              ".git"
+              "target"
+            ];
+          };
+        };
+      };
     };
 
     conform-nvim = {
       settings = {
         formatters_by_ft = {
-          rust = ["rustfmt"];
+          rust = [ "rustfmt" ];
         };
 
         formatters = {
@@ -26,6 +47,6 @@
     };
   };
   plugins.treesitter = {
-    grammarPackages = with config.plugins.treesitter.package.builtGrammars; [rust];
+    grammarPackages = with config.plugins.treesitter.package.builtGrammars; [ rust ];
   };
 }

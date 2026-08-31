@@ -44,11 +44,36 @@
 
       extraOptions.settings = {
         gopls = {
-          staticcheck = true;
+          staticcheck = false;
+          semanticTokens = false;
           directoryFilters = [
             "-.git"
             "-.vscode"
+            "-.direnv"
+            "-vendor"
+            "-node_modules"
+            "-bin"
+            "-dist"
+            "-tmp"
+            "-hack"
+            "-dev/local-backupbuckets"
           ];
+          analyses = {
+            fieldalignment = false;
+            nilness = true;
+            shadow = true;
+            unusedparams = true;
+            unusedwrite = true;
+            useany = true;
+          };
+          codelenses = {
+            gc_details = false;
+            generate = true;
+            regenerate_cgo = true;
+            tidy = true;
+            upgrade_dependency = true;
+            vendor = true;
+          };
         };
       };
     };

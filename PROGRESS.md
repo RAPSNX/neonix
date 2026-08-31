@@ -125,6 +125,9 @@ This document tracks the execution progress across all phases of the comprehensi
   - **Issue:** `cmdheight = 1` reserved an empty line below the global statusline, and uncompiled Lua startup was slow.
   - **Resolution:** Configured `cmdheight = 0` and enabled `luaLoader.enable = true` for bytecode module compilation.
   - **Commit:** `c580c44`
+- [x] **Large Project LSP Optimizations (`plugins/common/lsp/lsp.nix`, `plugins/ide/langs/go.nix`, `plugins/ide/langs/rust.nix`)**
+  - **Issue:** LSP servers (`gopls`, `rust-analyzer`) in massive codebases (e.g. Gardener) caused high CPU/memory usage by indexing vendored directories, calculating semantic tokens on every keystroke, and running heavy multi-package staticcheck analyses during typing.
+  - **Resolution:** Expanded `gopls` directory filters (`-vendor`, `-.direnv`, `-hack`, `-bin`, etc.), offloaded `staticcheck` to on-demand `golangci-lint` (`<leader>ll`), disabled `semanticTokensProvider` to let Treesitter handle highlighting without IPC overhead, and configured `rust-analyzer` directory exclusions.
 - [x] **Startup Latency & Derivation Benchmarking**
   - Profiled cold-start times across packages:
     - **Default IDE Package:** ~145ms
