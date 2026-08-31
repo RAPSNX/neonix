@@ -11,8 +11,8 @@ This document tracks the execution progress across all phases of the comprehensi
 | **Audit** | Comprehensive 8-Workstream Architecture Audit | **Completed** | — |
 | **Phase 1** | Bugs & Correctness Fixes | **Completed** | `8df6bda`, `d3bd984`, `d942e51` |
 | **Phase 2** | High-Impact Performance Optimizations | **Completed** | `5bd2327`, `2bbcd6c` |
-| **Phase 3** | Timing, Event & Lifecycle Cleanup | **Completed** | `13bc89f`, `87c0a91` |
-| **Phase 4** | Architecture & Modularity Simplification | *Pending* | — |
+| **Phase 3** | Timing, Event & Lifecycle Cleanup | **Completed** | `33c7fe1`, `3d64ec7` |
+| **Phase 4** | Architecture & Modularity Simplification | **Completed** | `b1e2e12` |
 | **Phase 5** | Optional Micro-optimizations & Benchmarking | *Pending* | — |
 
 ---
@@ -82,28 +82,36 @@ This document tracks the execution progress across all phases of the comprehensi
 - [x] **Which-Key Spec Redundancy Elimination (`plugins/common/style/which-key.nix`)**
   - **Issue:** Redundant manual single-key specs with duplicated descriptions risking config drift.
   - **Resolution:** Removed duplicate key specs, retaining only group prefixes (`<leader>s`, `<leader>r`, `<leader>d`, `<leader>t`, `<leader>l`) and hidden keys with standard `__unkeyed-1`.
+  - **Commit:** `33c7fe1`
 - [x] **Global Winbar Redraw Guarding (`plugins/ide/navic.nix`)**
   - **Issue:** `vim.o.winbar` evaluated Navic on all windows, including floating windows and non-code buffers.
   - **Resolution:** Wrapped winbar in `_G.neonix_navic_winbar` with `package.loaded` and `is_available()` availability checks.
+  - **Commit:** `33c7fe1`
 - [x] **LazyGit File Edit from Oil Buffer Collision (`plugins/ide/snacks.nix`)**
   - **Issue:** Editing a file from LazyGit while the origin window was displaying an Oil buffer caused an edit conflict.
   - **Resolution:** Detected `oil` filetype on active buffer and opened a clean buffer prior to `:edit`.
+  - **Commit:** `3d64ec7`
 - [x] **Neotest Large Repository Discovery Scalability (`plugins/ide/neotest.nix`)**
   - **Issue:** Opening summary in large projects triggered simultaneous whole-repository AST discovery.
   - **Resolution:** Set `discovery.enabled = false` in Neotest setup so test discovery is on-demand for active buffers.
+  - **Commit:** `3d64ec7`
 
 ---
 
-### Phase 4 — Architecture Cleanup (`PENDING`)
+### Phase 4 — Architecture Cleanup (`COMPLETED`)
 
-- [ ] **Standardize Nix Flake Outputs (`flake.nix`)**
-  - Add standard `homeModules` output alongside `homeManagerModules` to eliminate Nix flake check warnings.
-- [ ] **De-duplicate Treesitter Grammars (`treesitter.nix`, `bash.nix`, `json.nix`)**
-  - Remove redundant `bash` and `json` grammar entries across modules.
-- [ ] **Decouple Editing Utilities from LSP Module (`plugins/common/lsp/lsp.nix`)**
-  - Move `nvim-autopairs` and `nvim-surround` out of `lsp.nix` into proper common editing configurations.
-- [ ] **Dead Code Cleanup (`plugins/ide/langs/nix.nix`)**
-  - Remove obsolete commented `# hmts.enable = true;`.
+- [x] **Standardize Nix Flake Outputs (`flake.nix`)**
+  - **Issue:** Flake output only defined `homeManagerModules`, which emitted warnings in standard flake checks.
+  - **Resolution:** Added standard `homeModules` output with `default` and `neonix` attributes, and aliased `homeManagerModules = self.homeModules;`.
+  - **Commit:** `b1e2e12`
+- [x] **De-duplicate Treesitter Grammars (`treesitter.nix`, `bash.nix`, `json.nix`)**
+  - **Issue:** `bash` and `json` grammars were redundantly specified in both `treesitter.nix` and language modules.
+  - **Resolution:** Removed duplicates from `treesitter.nix`, delegating grammar specifications to language modules.
+  - **Commit:** `b1e2e12`
+- [x] **Dead Code Cleanup (`plugins/ide/langs/nix.nix`)**
+  - **Issue:** Commented-out dead code `# hmts.enable = true;`.
+  - **Resolution:** Removed obsolete comments.
+  - **Commit:** `b1e2e12`
 
 ---
 
@@ -120,3 +128,7 @@ This document tracks the execution progress across all phases of the comprehensi
 - **Phase 3 Verification:**
   - `nix flake check --print-build-logs`: **PASSED** (all derivations, formatting, and smoke tests)
   - Generated `init.lua` Derivation check (`nixvim-print-init`): **PASSED** (Which-key group specs, Navic `_G.neonix_navic_winbar`, Snacks Lazygit Oil guard, Neotest on-demand discovery)
+- **Phase 4 Verification:**
+  - `nix flake check --print-build-logs`: **PASSED** (all derivations, formatting, and smoke tests)
+  - Standard `homeModules` schema check: **PASSED**
+  - Parser bundle derivation inspection: **PASSED** (all parsers including `bash` and `json` verified)
