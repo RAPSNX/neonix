@@ -41,7 +41,7 @@
         "<leader>fr" = {
           action = "resume";
           options = {
-            desc = "Find in current buffer";
+            desc = "Resume Telescope";
           };
         };
         "<leader>f?" = {
