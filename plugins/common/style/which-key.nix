@@ -50,6 +50,22 @@
         };
       }
       {
+        __unkeyed-ra = "<leader>ra";
+        desc = "Code Action";
+        icon = {
+          icon = "󰌵";
+          color = "yellow";
+        };
+      }
+      {
+        __unkeyed-rn = "<leader>rn";
+        desc = "Rename";
+        icon = {
+          icon = "󰤌";
+          color = "yellow";
+        };
+      }
+      {
         __unkeyed-numb = "<leader>d";
         group = "Debug";
         icon = {

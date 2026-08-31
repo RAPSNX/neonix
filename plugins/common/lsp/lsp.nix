@@ -14,9 +14,16 @@
           gD = "declaration";
           gr = "references";
           gd = "definition";
-          ca = "code_action";
           gi = "implementation";
           gt = "type_definition";
+          "<leader>ra" = {
+            action = "code_action";
+            desc = "Code Action";
+            mode = [
+              "n"
+              "v"
+            ];
+          };
           "<leader>rn" = {
             action = "rename";
             desc = "Rename";

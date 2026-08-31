@@ -13,8 +13,6 @@ With great power comes great responsiblity, to remember the power of `neovim` he
 
 | Action        | keymap                                    |
 | --------      | --------                                  |
-| `<leader>,`   | vertical split                            |
-| `<leader>,`   | horizontal split                          |
 | `<leader>c`   | Select system clipboard                   |
 | `<leader>T`   | Toggle termimal                           |
 | `<leader>tt`  | Run nearest test                          |
@@ -24,6 +22,8 @@ With great power comes great responsiblity, to remember the power of `neovim` he
 | `<leader>ts`  | Toggle test summary                       |
 | `<leader>to`  | Toggle test output panel                  |
 | `<leader>ll`  | Lint buffer                               |
+| `<leader>ra`  | Code Action (Normal & Visual)             |
+| `<leader>rn`  | Rename symbol                             |
 | `<leader>dc`  | Start/Continue debugging                  |
 | `<leader>gd`  | Open diff view                            |
 | `<leader>gD`  | Close diff view                           |

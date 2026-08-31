@@ -134,16 +134,20 @@
         },
       })
 
-      -- Close floating windows with q.
-      vim.keymap.set('n', 'q', function()
-        local winid = vim.api.nvim_get_current_win()
-        local config = vim.api.nvim_win_get_config(winid)
-
-        if config.relative ~= "" then
-          vim.api.nvim_win_close(winid, true)
-        else
-          vim.api.nvim_feedkeys('q', 'n', false)
-        end
-      end, { noremap = true, silent = true })
+      -- Close floating/tool windows with q.
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = {
+          "neotest-output",
+          "neotest-output-panel",
+          "neotest-summary",
+          "help",
+          "qf",
+          "dap-float",
+        },
+        callback = function(event)
+          vim.bo[event.buf].buflisted = false
+          vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true, desc = "Close window" })
+        end,
+      })
     '';
 }
