@@ -5,7 +5,7 @@
       bigfile.enabled = true;
       gitbrowse.enabled = true;
       lazygit = {
-        enable = true;
+        enabled = true;
         config.os = {
           edit = ''[ -z "$NVIM" ] && (nvim -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote-send "<C-\><C-N>:NeonixLazygitEdit {{filename}}<CR>")'';
           editAtLine = ''[ -z "$NVIM" ] && (nvim +{{line}} -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote-send "<C-\><C-N>:{{line}}NeonixLazygitEdit {{filename}}<CR>")'';
