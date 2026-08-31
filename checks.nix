@@ -72,6 +72,7 @@ in
             '+doautocmd BufWritePost' \
             '+lua local go = require("neotest-go"); local ginkgo = require("neotest-ginkgo"); assert(go.is_test_file("${plainTest}")); assert(not ginkgo.is_test_file("${plainTest}")); assert(ginkgo.is_test_file("${ginkgoTest}")); assert(not go.is_test_file("${ginkgoTest}")); assert(go.is_test_file("${mentionTest}")); assert(not ginkgo.is_test_file("${mentionTest}")); assert(ginkgo.is_test_file("${trailingCommentTest}")); assert(not go.is_test_file("${trailingCommentTest}")); assert(go.is_test_file("${subpackageTest}")); assert(not ginkgo.is_test_file("${subpackageTest}"))' \
             '+lua assert(pcall(require, "diffview")); assert(pcall(require, "gitsigns"))' \
+            '+lua local config = vim.lsp.config.gopls; assert(type(config.on_attach) == "function"); config.on_attach({}, 0); for _, lhs in ipairs({ " rf", " rs", " rj", " ri", " rq" }) do local map = vim.fn.maparg(lhs, "n", false, true); assert(map.buffer == 1, "missing gopls keymap: " .. lhs) end' \
             '+qall!' \
             2>&1 >/dev/null
         )
