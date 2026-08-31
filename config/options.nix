@@ -1,6 +1,7 @@
 {
   viAlias = true;
   vimAlias = true;
+  luaLoader.enable = true;
 
   globals = {
     mapleader = " ";
