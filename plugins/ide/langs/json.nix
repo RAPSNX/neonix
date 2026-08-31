@@ -3,12 +3,14 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   plugins = {
     conform-nvim = {
       settings = {
         formatters_by_ft = {
-          json = ["jsonfmt"];
+          json = [ "jsonfmt" ];
+          jsonc = [ "jsonfmt" ];
         };
         formatters = {
           jsonfmt = {
@@ -23,6 +25,6 @@
   };
 
   plugins.treesitter = {
-    grammarPackages = with config.plugins.treesitter.package.builtGrammars; [json];
+    grammarPackages = with config.plugins.treesitter.package.builtGrammars; [ json ];
   };
 }

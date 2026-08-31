@@ -46,7 +46,11 @@
     };
   };
 
-  extraConfigVim = ''
-    au BufRead,BufNewFile flake.lock setf json
+  extraConfigLua = ''
+    vim.filetype.add({
+      filename = {
+        ["flake.lock"] = "json",
+      },
+    })
   '';
 }
