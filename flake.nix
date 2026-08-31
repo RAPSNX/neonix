@@ -54,10 +54,12 @@
 
       devShells = forAllSystems (pkgs: import ./devshell.nix { inherit pkgs pre-commit-hooks; });
 
-      homeManagerModules = {
-        default = self.homeManagerModules.neonix;
+      homeModules = {
+        default = self.homeModules.neonix;
         neonix = import ./hm-module.nix self;
       };
+
+      homeManagerModules = self.homeModules;
 
       packages = forAllSystems (pkgs: {
         default = nixvim.legacyPackages.${pkgs.stdenv.hostPlatform.system}.makeNixvimWithModule {

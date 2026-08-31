@@ -13,10 +13,6 @@
   plugins = {
     nix.enable = true;
 
-    # TODO: remove this -> but lets test it one time
-    # highlight inline code in nix files
-    # hmts.enable = true;
-
     conform-nvim = {
       settings = {
         formatters_by_ft = {

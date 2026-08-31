@@ -28,16 +28,12 @@
       grammarPackages = with config.plugins.treesitter.package.builtGrammars; [
         c
         css
-        bash
-        fish
         diff
-
+        fish
+        toml
+        vhs
         vim
         vimdoc
-        vhs
-
-        json
-        toml
       ];
     };
     treesitter-textobjects = {
