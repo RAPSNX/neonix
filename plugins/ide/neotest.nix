@@ -79,15 +79,21 @@
       local neotest_go = require("neotest-go")
       local neotest_ginkgo = require("neotest-ginkgo")
 
-      -- Give every Go test file exactly one adapter.
+      -- Give every Go test file exactly one adapter with memoized discovery.
+      local ginkgo_cache = {}
       local ginkgo_is_test_file = neotest_ginkgo.is_test_file
       neotest_ginkgo.is_test_file = function(file_path)
+        if ginkgo_cache[file_path] ~= nil then
+          return ginkgo_cache[file_path]
+        end
         if not ginkgo_is_test_file(file_path) then
+          ginkgo_cache[file_path] = false
           return false
         end
         -- Discovery runs asynchronously, so use libuv instead of vim.fn.
         local fd = vim.uv.fs_open(file_path, "r", 438)
         if not fd then
+          ginkgo_cache[file_path] = false
           return false
         end
         local stat = vim.uv.fs_fstat(fd)
@@ -112,10 +118,12 @@
             import_path
             and (import_path == "github.com/onsi/ginkgo" or import_path == "github.com/onsi/ginkgo/v2")
           then
+            ginkgo_cache[file_path] = true
             return true
           end
         end
 
+        ginkgo_cache[file_path] = false
         return false
       end
 
