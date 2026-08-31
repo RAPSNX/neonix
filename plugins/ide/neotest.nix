@@ -133,6 +133,9 @@
       end
 
       require("neotest").setup({
+        discovery = {
+          enabled = false,
+        },
         output = {
           open_on_run = true,
         },

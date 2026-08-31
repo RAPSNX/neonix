@@ -27,6 +27,10 @@
       end
 
       vim.api.nvim_set_current_win(origin)
+      local current_buf = vim.api.nvim_win_get_buf(origin)
+      if vim.bo[current_buf].filetype == "oil" then
+        vim.cmd("enew")
+      end
       vim.cmd({ cmd = "edit", args = { opts.args } })
       if opts.range > 0 then
         vim.api.nvim_win_set_cursor(0, { opts.line1, 0 })
