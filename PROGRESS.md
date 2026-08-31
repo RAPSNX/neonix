@@ -10,8 +10,8 @@ This document tracks the execution progress across all phases of the comprehensi
 |---|---|---|---|
 | **Audit** | Comprehensive 8-Workstream Architecture Audit | **Completed** | — |
 | **Phase 1** | Bugs & Correctness Fixes | **Completed** | `8df6bda`, `d3bd984`, `d942e51` |
-| **Phase 2** | High-Impact Performance Optimizations | **Completed** | `a9dfb21`, `74bc29d` |
-| **Phase 3** | Timing, Event & Lifecycle Cleanup | *Pending* | — |
+| **Phase 2** | High-Impact Performance Optimizations | **Completed** | `5bd2327`, `2bbcd6c` |
+| **Phase 3** | Timing, Event & Lifecycle Cleanup | **Completed** | `13bc89f`, `87c0a91` |
 | **Phase 4** | Architecture & Modularity Simplification | *Pending* | — |
 | **Phase 5** | Optional Micro-optimizations & Benchmarking | *Pending* | — |
 
@@ -39,7 +39,7 @@ This document tracks the execution progress across all phases of the comprehensi
   - **Commit:** `8df6bda`
 - [x] **Snacks Lazygit Configuration Typo (`plugins/ide/snacks.nix`)**
   - **Issue:** Used `enable = true` instead of `enabled = true` in Snacks settings.
-  - **Resolution:** Standardized to `enabled = true`.
+  - **Resolution:** Standardized to `enabled = true` benchmarks.
   - **Commit:** `8df6bda`
 - [x] **Modernize `flake.lock` Filetype Detection (`plugins/ide/langs/nix.nix`)**
   - **Issue:** Used legacy Vimscript `au BufRead,BufNewFile flake.lock setf json`.
@@ -61,24 +61,36 @@ This document tracks the execution progress across all phases of the comprehensi
 - [x] **Lualine LSP Statusline Redraw Optimization (`plugins/common/style/lualine.nix`)**
   - **Issue:** Synchronous `vim.fn.index` Vimscript bridge call and redundant `client.config.filetypes` check on every statusline redraw.
   - **Resolution:** Aggregated client names directly from `vim.lsp.get_clients({ bufnr = 0 })` via `table.concat`.
+  - **Commit:** `5bd2327`
 - [x] **Blink.cmp / Luasnip Decoupling (`plugins/common/lsp/snippet.nix`, `blink.nix`)**
   - **Issue:** Unused `luasnip` + `jsregexp` engine loaded on startup (~8ms) despite `blink-cmp` having native snippet support.
   - **Resolution:** Removed `luasnip` to rely natively on `blink-cmp` and `friendly-snippets`.
+  - **Commit:** `5bd2327`
 - [x] **Oil Directory Buffer List Pollution (`plugins/common/explorer/oil.nix`)**
   - **Issue:** `buf_options.buflisted = true` polluted buffer switchers (`<leader><space>`) and buffer navigation with directory paths.
   - **Resolution:** Set `buf_options.buflisted = false`.
+  - **Commit:** `5bd2327`
 - [x] **Neotest Ginkgo AST Discovery Caching (`plugins/ide/neotest.nix`)**
   - **Issue:** Filesystem I/O and regex scanning executed twice for every Go test file during test discovery.
   - **Resolution:** Added `ginkgo_cache` memoization table to `is_test_file` classifier.
+  - **Commit:** `2bbcd6c`
 
 ---
 
-### Phase 3 — Timing, Event & Lifecycle Cleanup (`PENDING`)
+### Phase 3 — Timing, Event & Lifecycle Cleanup (`COMPLETED`)
 
-- [ ] **Which-Key Spec Redundancy Elimination (`plugins/common/style/which-key.nix`)**
-  - Remove duplicate single-key manual specs that already have `desc` attributes in keymap declarations; retain only group prefixes (`<leader>f`, `<leader>g`, etc.).
-- [ ] **Global Winbar Redraw Optimization (`plugins/ide/navic.nix`)**
-  - Guard `nvim-navic` winbar evaluation to prevent overhead on non-code buffers and floating windows.
+- [x] **Which-Key Spec Redundancy Elimination (`plugins/common/style/which-key.nix`)**
+  - **Issue:** Redundant manual single-key specs with duplicated descriptions risking config drift.
+  - **Resolution:** Removed duplicate key specs, retaining only group prefixes (`<leader>s`, `<leader>r`, `<leader>d`, `<leader>t`, `<leader>l`) and hidden keys with standard `__unkeyed-1`.
+- [x] **Global Winbar Redraw Guarding (`plugins/ide/navic.nix`)**
+  - **Issue:** `vim.o.winbar` evaluated Navic on all windows, including floating windows and non-code buffers.
+  - **Resolution:** Wrapped winbar in `_G.neonix_navic_winbar` with `package.loaded` and `is_available()` availability checks.
+- [x] **LazyGit File Edit from Oil Buffer Collision (`plugins/ide/snacks.nix`)**
+  - **Issue:** Editing a file from LazyGit while the origin window was displaying an Oil buffer caused an edit conflict.
+  - **Resolution:** Detected `oil` filetype on active buffer and opened a clean buffer prior to `:edit`.
+- [x] **Neotest Large Repository Discovery Scalability (`plugins/ide/neotest.nix`)**
+  - **Issue:** Opening summary in large projects triggered simultaneous whole-repository AST discovery.
+  - **Resolution:** Set `discovery.enabled = false` in Neotest setup so test discovery is on-demand for active buffers.
 
 ---
 
@@ -105,3 +117,6 @@ This document tracks the execution progress across all phases of the comprehensi
   - `nix flake check --print-build-logs`: **PASSED** (all derivations, formatting, and smoke tests)
   - Headless `--startuptime` profiling: **PASSED** (Luasnip/JSRegexp no longer loaded on startup)
   - Generated `init.lua` Derivation check (`nixvim-print-init`): **PASSED** (Lualine `table.concat`, Oil `buflisted = false`, Neotest `ginkgo_cache`)
+- **Phase 3 Verification:**
+  - `nix flake check --print-build-logs`: **PASSED** (all derivations, formatting, and smoke tests)
+  - Generated `init.lua` Derivation check (`nixvim-print-init`): **PASSED** (Which-key group specs, Navic `_G.neonix_navic_winbar`, Snacks Lazygit Oil guard, Neotest on-demand discovery)
