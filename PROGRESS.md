@@ -12,8 +12,8 @@ This document tracks the execution progress across all phases of the comprehensi
 | **Phase 1** | Bugs & Correctness Fixes | **Completed** | `8df6bda`, `d3bd984`, `d942e51` |
 | **Phase 2** | High-Impact Performance Optimizations | **Completed** | `5bd2327`, `2bbcd6c` |
 | **Phase 3** | Timing, Event & Lifecycle Cleanup | **Completed** | `33c7fe1`, `3d64ec7` |
-| **Phase 4** | Architecture & Modularity Simplification | **Completed** | `b1e2e12` |
-| **Phase 5** | Optional Micro-optimizations & Benchmarking | *Pending* | — |
+| **Phase 4** | Architecture & Modularity Simplification | **Completed** | `3f1a6a1`, `6f74408` |
+| **Phase 5** | Micro-optimizations & Benchmarking | **Completed** | `c580c44` |
 
 ---
 
@@ -103,15 +103,33 @@ This document tracks the execution progress across all phases of the comprehensi
 - [x] **Standardize Nix Flake Outputs (`flake.nix`)**
   - **Issue:** Flake output only defined `homeManagerModules`, which emitted warnings in standard flake checks.
   - **Resolution:** Added standard `homeModules` output with `default` and `neonix` attributes, and aliased `homeManagerModules = self.homeModules;`.
-  - **Commit:** `b1e2e12`
+  - **Commit:** `3f1a6a1`
 - [x] **De-duplicate Treesitter Grammars (`treesitter.nix`, `bash.nix`, `json.nix`)**
   - **Issue:** `bash` and `json` grammars were redundantly specified in both `treesitter.nix` and language modules.
   - **Resolution:** Removed duplicates from `treesitter.nix`, delegating grammar specifications to language modules.
-  - **Commit:** `b1e2e12`
+  - **Commit:** `3f1a6a1`
+- [x] **Decouple Editing Utilities from LSP Module (`plugins/common/lsp/lsp.nix`, `plugins/common/editing.nix`)**
+  - **Issue:** `nvim-autopairs`, `indent-o-matic`, and `nvim-surround` were mixed into `lsp.nix`.
+  - **Resolution:** Created dedicated `plugins/common/editing.nix` and decoupled non-LSP text editing utilities.
+  - **Commit:** `6f74408`
 - [x] **Dead Code Cleanup (`plugins/ide/langs/nix.nix`)**
   - **Issue:** Commented-out dead code `# hmts.enable = true;`.
   - **Resolution:** Removed obsolete comments.
-  - **Commit:** `b1e2e12`
+  - **Commit:** `3f1a6a1`
+
+---
+
+### Phase 5 — Micro-optimizations & Benchmarking (`COMPLETED`)
+
+- [x] **Command-Line Row Optimization & Bytecode Cache (`config/options.nix`)**
+  - **Issue:** `cmdheight = 1` reserved an empty line below the global statusline, and uncompiled Lua startup was slow.
+  - **Resolution:** Configured `cmdheight = 0` and enabled `luaLoader.enable = true` for bytecode module compilation.
+  - **Commit:** `c580c44`
+- [x] **Startup Latency & Derivation Benchmarking**
+  - Profiled cold-start times across packages:
+    - **Default IDE Package:** ~145ms
+    - **Mini Package (`.#mini`):** ~42ms
+  - Validated all derivations (`default`, `mini`, `homeModules`, smoke tests) with clean passing checks.
 
 ---
 
@@ -131,4 +149,8 @@ This document tracks the execution progress across all phases of the comprehensi
 - **Phase 4 Verification:**
   - `nix flake check --print-build-logs`: **PASSED** (all derivations, formatting, and smoke tests)
   - Standard `homeModules` schema check: **PASSED**
+  - Modular editing configuration decoupled into `plugins/common/editing.nix`: **PASSED**
   - Parser bundle derivation inspection: **PASSED** (all parsers including `bash` and `json` verified)
+- **Phase 5 Verification:**
+  - `nix flake check --print-build-logs`: **PASSED** (all derivations, smoke-test, package evaluations)
+  - Cold startup benchmarks: `mini` ~42ms, `default` ~145ms: **PASSED**
