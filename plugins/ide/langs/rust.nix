@@ -10,26 +10,6 @@
       enable = true;
       installCargo = true;
       installRustc = true;
-      extraOptions.settings = {
-        "rust-analyzer" = {
-          checkOnSave = {
-            command = "clippy";
-          };
-          procMacro = {
-            enable = true;
-          };
-          cargo = {
-            loadOutDirsFromCheck = true;
-          };
-          files = {
-            excludeDirs = [
-              ".direnv"
-              ".git"
-              "target"
-            ];
-          };
-        };
-      };
     };
 
     conform-nvim = {

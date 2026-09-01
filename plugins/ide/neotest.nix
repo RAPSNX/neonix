@@ -127,15 +127,18 @@
         return false
       end
 
+      vim.api.nvim_create_autocmd("BufWritePost", {
+        callback = function()
+          ginkgo_cache = {}
+        end,
+      })
+
       local go_is_test_file = neotest_go.is_test_file
       neotest_go.is_test_file = function(file_path)
         return go_is_test_file(file_path) and not neotest_ginkgo.is_test_file(file_path)
       end
 
       require("neotest").setup({
-        discovery = {
-          enabled = false,
-        },
         output = {
           open_on_run = true,
         },

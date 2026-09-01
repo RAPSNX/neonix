@@ -80,7 +80,6 @@
           module = {
             imports = [
               (inputs.import-tree ./config)
-              ./plugins/common/editing.nix
               ./plugins/common/explorer/mini.nix
               ./plugins/common/explorer/oil.nix
               ./plugins/common/lsp/better-escape.nix
@@ -101,6 +100,8 @@
             };
             plugins = {
               web-devicons.enable = true;
+              nvim-autopairs.enable = true;
+              nvim-surround.enable = true;
             };
           };
           # You can use `extraSpecialArgs` to pass additional arguments to your module files

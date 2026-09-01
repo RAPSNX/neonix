@@ -3,12 +3,6 @@
     lsp = {
       enable = true;
 
-      onAttach = ''
-        if client and client.server_capabilities then
-          client.server_capabilities.semanticTokensProvider = nil
-        end
-      '';
-
       keymaps = {
         diagnostic = {
           "]d" = "goto_next";
