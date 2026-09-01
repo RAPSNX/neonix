@@ -26,10 +26,12 @@
       };
 
       grammarPackages = with config.plugins.treesitter.package.builtGrammars; [
+        bash
         c
         css
         diff
         fish
+        json
         toml
         vhs
         vim

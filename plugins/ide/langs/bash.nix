@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   pkgs,
   ...
@@ -23,8 +22,5 @@
         };
       };
     };
-  };
-  plugins.treesitter = {
-    grammarPackages = with config.plugins.treesitter.package.builtGrammars; [ bash ];
   };
 }

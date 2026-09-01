@@ -58,11 +58,11 @@
             virtual_text = isLspDiagnosticsVisible,
             underline = isLspDiagnosticsVisible
           })
-    end)
+    end, { desc = "Toggle diagnostics" })
 
     vim.keymap.set("n", "<leader>sn", function()
       vim.wo.relativenumber = not vim.wo.relativenumber
       vim.wo.number = true
-    end)
+    end, { desc = "Toggle relative line numbers" })
   '';
 }
