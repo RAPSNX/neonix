@@ -22,24 +22,36 @@
       enable = true;
 
       onAttach.function = ''
-        local function code_action(kind)
+        local function code_action(pattern)
           return function()
             vim.lsp.buf.code_action({
-              context = { only = { kind } },
+              context = { only = { "refactor.rewrite" } },
+              filter = function(action)
+                local title = (action.title or ""):lower()
+                if type(pattern) == "table" then
+                  for _, p in ipairs(pattern) do
+                    if title:find(p, 1, true) then
+                      return true
+                    end
+                  end
+                  return false
+                end
+                return title:find(pattern, 1, true) ~= nil
+              end,
               apply = true,
             })
           end
         end
 
-        local function map(key, kind, desc)
-          vim.keymap.set("n", key, code_action(kind), { buffer = bufnr, desc = desc })
+        local function map(key, pattern, desc)
+          vim.keymap.set("n", key, code_action(pattern), { buffer = bufnr, desc = desc })
         end
 
-        map("<leader>rf", "refactor.rewrite.fill", "Fill struct or switch")
-        map("<leader>rs", "refactor.rewrite.splitLines", "Split lines")
-        map("<leader>rj", "refactor.rewrite.joinLines", "Join lines")
-        map("<leader>ri", "refactor.rewrite.invertIf", "Invert if condition")
-        map("<leader>rq", "refactor.rewrite.changeQuote", "Toggle quote style")
+        map("<leader>rf", "fill", "Fill struct or switch")
+        map("<leader>rs", "split", "Split lines")
+        map("<leader>rj", "join", "Join lines")
+        map("<leader>ri", "invert", "Invert if condition")
+        map("<leader>rq", { "quote", "raw string", "string literal" }, "Toggle quote style")
       '';
 
       extraOptions.settings.gopls.staticcheck = true;
