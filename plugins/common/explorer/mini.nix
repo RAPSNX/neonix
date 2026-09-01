@@ -1,4 +1,14 @@
-{ lib, ... }: {
+{
+  lib,
+  self ? { },
+  ...
+}:
+let
+  ref = self.ref or self.sourceInfo.ref or "fancy";
+  rev = self.shortRev or self.dirtyShortRev or "dev";
+  version = "${ref}:${rev}";
+in
+{
   plugins.mini = {
     enable = true;
     modules = {
@@ -28,7 +38,7 @@
             section = "";
           }
         ];
-        footer = "I use NIX btw. -- RAPSN";
+        footer = "I use nix btw. (${version}) -- RAPSN";
       };
 
       files = { }; # mini file explorer

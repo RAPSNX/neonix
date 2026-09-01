@@ -72,7 +72,7 @@
           };
           # You can use `extraSpecialArgs` to pass additional arguments to your module files
           extraSpecialArgs = {
-            inherit inputs;
+            inherit inputs self;
           };
         };
         mini = nixvim.legacyPackages.${pkgs.stdenv.hostPlatform.system}.makeNixvimWithModule {
@@ -106,7 +106,7 @@
           };
           # You can use `extraSpecialArgs` to pass additional arguments to your module files
           extraSpecialArgs = {
-            inherit inputs;
+            inherit inputs self;
           };
         };
       });
