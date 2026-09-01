@@ -1,15 +1,15 @@
 {
   plugins.spectre = {
     enable = true;
+    lazyLoad.settings = {
+      cmd = "Spectre";
+      keys = [
+        {
+          __unkeyed-1 = "<leader>S";
+          __unkeyed-2 = ''<cmd>lua require("spectre").toggle()<CR>'';
+          desc = "Toggle Spectre (Search & Replace)";
+        }
+      ];
+    };
   };
-  keymaps = [
-    {
-      action = ''<cmd>lua require("spectre").toggle()<CR>'';
-      key = "<leader>S";
-      options = {
-        desc = "Toggle Spectre (Search & Replace)";
-      };
-      mode = [ "n" ];
-    }
-  ];
 }

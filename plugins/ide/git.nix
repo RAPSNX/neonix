@@ -1,5 +1,15 @@
 {
-  plugins.diffview.enable = true;
+  plugins.diffview = {
+    enable = true;
+    lazyLoad.settings.cmd = [
+      "DiffviewOpen"
+      "DiffviewClose"
+      "DiffviewToggleFiles"
+      "DiffviewFocusFiles"
+      "DiffviewRefresh"
+      "DiffviewFileHistory"
+    ];
+  };
   plugins.gitsigns = {
     enable = true;
     settings.signs = {
