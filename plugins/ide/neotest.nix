@@ -51,6 +51,11 @@
           desc = "Debug nearest test";
         }
         {
+          __unkeyed-1 = "<leader>ta";
+          __unkeyed-2 = "<cmd>lua _G.neonix_neotest_toggle_adapter()<CR>";
+          desc = "Toggle test adapter (Ginkgo/Go)";
+        }
+        {
           __unkeyed-1 = "<leader>ts";
           __unkeyed-2 = ''<cmd>lua require("neotest").summary.toggle()<CR>'';
           desc = "Toggle test summary";
@@ -62,98 +67,67 @@
         }
       ];
 
-      # TODO: This is way to complicated, two options: find a simple solution or get this shit away
       after.__raw = ''
-          function()
-            local neotest_go = require("neotest-go")
-            local neotest_ginkgo = require("neotest-ginkgo")
+        function()
+          local neotest = require("neotest")
+          local adapters = {
+            go = require("neotest-go"),
+            ginkgo = require("neotest-ginkgo"),
+          }
+          local active_adapter = "ginkgo"
 
-
-        -- Give every Go test file exactly one adapter with memoized discovery.
-        local ginkgo_cache = {}
-        local ginkgo_is_test_file = neotest_ginkgo.is_test_file
-        neotest_ginkgo.is_test_file = function(file_path)
-          if ginkgo_cache[file_path] ~= nil then
-            return ginkgo_cache[file_path]
-          end
-          if not ginkgo_is_test_file(file_path) then
-            ginkgo_cache[file_path] = false
-            return false
-          end
-          -- Discovery runs asynchronously, so use libuv instead of vim.fn.
-          local fd = vim.uv.fs_open(file_path, "r", 438)
-          if not fd then
-            ginkgo_cache[file_path] = false
-            return false
-          end
-          local stat = vim.uv.fs_fstat(fd)
-          local content = stat and vim.uv.fs_read(fd, stat.size, 0) or ""
-          vim.uv.fs_close(fd)
-          local in_import_block = false
-          for line in content:gmatch("[^\n]+") do
-            local import_path
-            if in_import_block then
-              if line:match("^%s*%)%s*$") then
-                in_import_block = false
-              else
-                import_path = line:match("^%s*[%w_.]*%s*\"([^\"]+)\"")
-              end
-            elseif line:match("^%s*import%s*%(%s*$") or line:match("^%s*import%s*%(%s*//") then
-              in_import_block = true
-            else
-              import_path = line:match("^%s*import%s+[%w_.]*%s*\"([^\"]+)\"")
+          -- Both Go adapters identify *_test.go files. Gate that decision on the
+          -- selected framework without changing the upstream adapter modules.
+          local function selectable_adapter(name, adapter)
+            local wrapped = vim.tbl_extend("force", {}, adapter)
+            wrapped.is_test_file = function(file_path)
+              return active_adapter == name and adapter.is_test_file(file_path)
             end
-
-            if
-              import_path
-              and (import_path == "github.com/onsi/ginkgo" or import_path == "github.com/onsi/ginkgo/v2")
-            then
-              ginkgo_cache[file_path] = true
-              return true
-            end
+            return wrapped
           end
 
-          ginkgo_cache[file_path] = false
-          return false
-        end
-
-        vim.api.nvim_create_autocmd("BufWritePost", {
-          callback = function()
-            ginkgo_cache = {}
-          end,
-        })
-
-        local go_is_test_file = neotest_go.is_test_file
-        neotest_go.is_test_file = function(file_path)
-          return go_is_test_file(file_path) and not neotest_ginkgo.is_test_file(file_path)
-        end
-
-        require("neotest").setup({
-          output = {
-            open_on_run = true,
-          },
-          adapters = {
-            neotest_go,
-            neotest_ginkgo,
-          },
-        })
-
-        -- Close floating/tool windows with q.
-        vim.api.nvim_create_autocmd("FileType", {
-          pattern = {
-            "neotest-output",
-            "neotest-output-panel",
-            "neotest-summary",
-            "help",
-            "qf",
-            "dap-float",
-          },
-          callback = function(event)
-            vim.bo[event.buf].buflisted = false
-            vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true, desc = "Close window" })
-          end,
-        })
+          local function adapter_label()
+            return active_adapter == "ginkgo" and "Ginkgo" or "Go"
           end
+
+          _G.neonix_neotest_toggle_adapter = function()
+            active_adapter = active_adapter == "ginkgo" and "go" or "ginkgo"
+            vim.notify("Neotest adapter: " .. adapter_label())
+          end
+
+          _G.neonix_neotest_active_adapter = function()
+            return active_adapter
+          end
+
+          neotest.setup({
+            discovery = {
+              enabled = false,
+            },
+            output = {
+              open_on_run = true,
+            },
+            adapters = {
+              selectable_adapter("ginkgo", adapters.ginkgo),
+              selectable_adapter("go", adapters.go),
+            },
+          })
+
+          -- Close floating/tool windows with q.
+          vim.api.nvim_create_autocmd("FileType", {
+            pattern = {
+              "neotest-output",
+              "neotest-output-panel",
+              "neotest-summary",
+              "help",
+              "qf",
+              "dap-float",
+            },
+            callback = function(event)
+              vim.bo[event.buf].buflisted = false
+              vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true, desc = "Close window" })
+            end,
+          })
+        end
       '';
     };
   };
