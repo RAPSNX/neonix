@@ -62,6 +62,7 @@
         }
       ];
 
+      # TODO: This is way to complicated, two options: find a simple solution or get this shit away
       after.__raw = ''
           function()
             local neotest_go = require("neotest-go")
