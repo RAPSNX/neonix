@@ -74,10 +74,15 @@
             go = require("neotest-go"),
             ginkgo = require("neotest-ginkgo"),
           }
+
+          -- Ginkgo is the default for each Neovim session. <leader>ta changes
+          -- this value so subsequent test discovery and runs use plain Go.
           local active_adapter = "ginkgo"
 
-          -- Both Go adapters identify *_test.go files. Gate that decision on the
-          -- selected framework without changing the upstream adapter modules.
+          -- Both upstream adapters accept every *_test.go filename, so Neotest
+          -- cannot infer whether a file belongs to Ginkgo or standard Go tests.
+          -- Wrap copies of the adapters and let only the selected one claim files.
+          -- Copying keeps the modules returned by require() unchanged.
           local function selectable_adapter(name, adapter)
             local wrapped = vim.tbl_extend("force", {}, adapter)
             wrapped.is_test_file = function(file_path)
@@ -95,6 +100,7 @@
             vim.notify("Neotest adapter: " .. adapter_label())
           end
 
+          -- Expose the session mode for smoke tests without exposing adapters.
           _G.neonix_neotest_active_adapter = function()
             return active_adapter
           end
@@ -112,15 +118,13 @@
             },
           })
 
-          -- Close floating/tool windows with q.
+          -- These filetypes do not exist until Neotest is loaded, so their
+          -- buffer-local mappings can stay inside this lazy-load callback.
           vim.api.nvim_create_autocmd("FileType", {
             pattern = {
               "neotest-output",
               "neotest-output-panel",
               "neotest-summary",
-              "help",
-              "qf",
-              "dap-float",
             },
             callback = function(event)
               vim.bo[event.buf].buflisted = false
