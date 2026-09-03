@@ -5,10 +5,6 @@
   ...
 }:
 {
-  extraPlugins = [
-    pkgs.vimPlugins.vim-helm
-  ];
-
   extraPackages = with pkgs; [
     helm-ls
     yaml-language-server

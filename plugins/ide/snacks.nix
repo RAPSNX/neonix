@@ -1,4 +1,7 @@
+{ pkgs, ... }:
 {
+  extraPackages = [ pkgs.imagemagick ];
+
   plugins.snacks = {
     enable = true;
     settings = {
@@ -13,9 +16,23 @@
       };
       notifier.enabled = true;
       notify.enabled = true;
+      image.enabled = true;
+      input.enabled = true;
+      picker = {
+        enabled = true;
+        ui_select = true;
+        sources = {
+          files = {
+            follow = true;
+            hidden = true;
+          };
+          grep.follow = true;
+        };
+      };
       quickfile.enabled = true;
       terminal.enabled = true;
       scroll.enabled = true;
+      words.enabled = true;
     };
   };
 
@@ -40,6 +57,54 @@
 
   keymaps = [
     {
+      action = "<cmd>lua Snacks.picker.files()<cr>";
+      key = "<leader>ff";
+      options.desc = "Find files";
+      mode = [ "n" ];
+    }
+    {
+      action = "<cmd>lua Snacks.picker.lines()<cr>";
+      key = "<leader>fz";
+      options.desc = "Find in current buffer";
+      mode = [ "n" ];
+    }
+    {
+      action = "<cmd>lua Snacks.picker.resume()<cr>";
+      key = "<leader>fr";
+      options.desc = "Resume picker";
+      mode = [ "n" ];
+    }
+    {
+      action = "<cmd>lua Snacks.picker.recent()<cr>";
+      key = "<leader>f?";
+      options.desc = "Recent files";
+      mode = [ "n" ];
+    }
+    {
+      action = "<cmd>lua Snacks.picker.grep()<cr>";
+      key = "<leader>fg";
+      options.desc = "Grep";
+      mode = [ "n" ];
+    }
+    {
+      action = "<cmd>lua Snacks.picker.grep_word()<cr>";
+      key = "<leader>fw";
+      options.desc = "Search word under cursor";
+      mode = [ "n" ];
+    }
+    {
+      action = "<cmd>lua Snacks.picker.buffers()<cr>";
+      key = "<leader><space>";
+      options.desc = "Find buffer";
+      mode = [ "n" ];
+    }
+    {
+      action = "<cmd>lua Snacks.picker.command_history()<cr>";
+      key = "<leader>fc";
+      options.desc = "Search in command history";
+      mode = [ "n" ];
+    }
+    {
       action.__raw = ''
         function()
           vim.g.neonix_lazygit_origin = vim.api.nvim_get_current_win()
@@ -63,6 +128,14 @@
   ];
 
   plugins.which-key.settings.spec = [
+    {
+      __unkeyed-1 = "<leader>f";
+      group = "Search";
+      icon = {
+        icon = "󰍉";
+        color = "blue";
+      };
+    }
     {
       __unkeyed-1 = "<leader>g";
       group = "Git";

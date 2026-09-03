@@ -99,7 +99,6 @@
               };
             };
             plugins = {
-              web-devicons.enable = true;
               nvim-autopairs.enable = true;
               nvim-surround.enable = true;
             };
