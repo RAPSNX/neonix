@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   plugins = {
     lsp.servers.rust_analyzer = {
       enable = true;
@@ -14,7 +15,7 @@
     conform-nvim = {
       settings = {
         formatters_by_ft = {
-          rust = ["rustfmt"];
+          rust = [ "rustfmt" ];
         };
 
         formatters = {
@@ -26,6 +27,6 @@
     };
   };
   plugins.treesitter = {
-    grammarPackages = with config.plugins.treesitter.package.builtGrammars; [rust];
+    grammarPackages = with config.plugins.treesitter.package.builtGrammars; [ rust ];
   };
 }

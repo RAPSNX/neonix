@@ -117,10 +117,7 @@
         # lua
         ''
           function()
-          	local dap = require('dap')
-          	dap.disconnect()
-          	dap.close()
-          	dap.run_last()
+            require('dap').restart()
           end
         '';
       key = "<leader>dr";

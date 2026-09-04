@@ -128,27 +128,18 @@
               # lua
               ''
                 function()
-                    local buf_ft = vim.bo.filetype
-                    local clients = vim.lsp.get_clients({ bufnr = 0 })
-                    if #clients == 0 then
-                        return "None"
-                    end
-
-                    local msg = ""
-                    for _, client in ipairs(clients) do
-                        local filetypes = client.config.filetypes
-                        if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-                            msg = msg .. client.name .. " "
-                        end
-                    end
-
-                    if msg ~= "" then
-                      return msg
-                    else
-                      return "None"
-                    end
-
+                  local clients = vim.lsp.get_clients({ bufnr = 0 })
+                  if #clients == 0 then
+                    return "None"
                   end
+
+                  local names = {}
+                  for _, client in ipairs(clients) do
+                    table.insert(names, client.name)
+                  end
+
+                  return table.concat(names, " ")
+                end
               '';
             icon = {
               __unkeyed-1 = " ";

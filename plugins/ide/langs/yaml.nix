@@ -5,10 +5,6 @@
   ...
 }:
 {
-  extraPlugins = [
-    pkgs.vimPlugins.vim-helm
-  ];
-
   extraPackages = with pkgs; [
     helm-ls
     yaml-language-server
@@ -78,7 +74,16 @@
           if bufnr and bufnr > 0 then
             local lines = vim.api.nvim_buf_get_lines(bufnr, 0, 100, false)
             for _, line in ipairs(lines) do
-              if line:find("{{", 1, true) then
+              if
+                line:match("{{%-?%s*%.Values")
+                or line:match("{{%-?%s*%.Release")
+                or line:match("{{%-?%s*%.Chart")
+                or line:match("{{%-?%s*%.Files")
+                or line:match("{{%-?%s*%.Capabilities")
+                or line:match("{{%-?%s*template%s")
+                or line:match("{{%-?%s*include%s")
+                or line:match("{{%-?%s*define%s")
+              then
                 return "helm"
               end
             end

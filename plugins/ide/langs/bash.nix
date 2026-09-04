@@ -1,9 +1,9 @@
 {
-  config,
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   plugins = {
     lsp.servers.bashls = {
       enable = true;
@@ -11,7 +11,8 @@
     conform-nvim = {
       settings = {
         formatters_by_ft = {
-          sh = ["shfmt"];
+          sh = [ "shfmt" ];
+          bash = [ "shfmt" ];
         };
 
         formatters = {
@@ -21,8 +22,5 @@
         };
       };
     };
-  };
-  plugins.treesitter = {
-    grammarPackages = with config.plugins.treesitter.package.builtGrammars; [bash];
   };
 }

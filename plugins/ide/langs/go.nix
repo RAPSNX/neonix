@@ -21,15 +21,40 @@
     lsp.servers.gopls = {
       enable = true;
 
-      extraOptions.settings = {
-        gopls = {
-          staticcheck = true;
-          directoryFilters = [
-            "-.git"
-            "-.vscode"
-          ];
-        };
-      };
+      onAttach.function = ''
+        local function code_action(pattern)
+          return function()
+            vim.lsp.buf.code_action({
+              context = { only = { "refactor.rewrite" } },
+              filter = function(action)
+                local title = (action.title or ""):lower()
+                if type(pattern) == "table" then
+                  for _, p in ipairs(pattern) do
+                    if title:find(p, 1, true) then
+                      return true
+                    end
+                  end
+                  return false
+                end
+                return title:find(pattern, 1, true) ~= nil
+              end,
+              apply = true,
+            })
+          end
+        end
+
+        local function map(key, pattern, desc)
+          vim.keymap.set("n", key, code_action(pattern), { buffer = bufnr, desc = desc })
+        end
+
+        map("<leader>rf", "fill", "Fill struct or switch")
+        map("<leader>rs", "split", "Split lines")
+        map("<leader>rj", "join", "Join lines")
+        map("<leader>ri", "invert", "Invert if condition")
+        map("<leader>rq", { "quote", "raw string", "string literal" }, "Toggle quote style")
+      '';
+
+      extraOptions.settings.gopls.staticcheck = true;
     };
 
     dap-go = {

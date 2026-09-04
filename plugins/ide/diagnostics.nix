@@ -1,6 +1,7 @@
 {
   plugins.trouble = {
     enable = true;
+    lazyLoad.settings.cmd = "Trouble";
   };
 
   diagnostic.settings = {
@@ -58,16 +59,11 @@
             virtual_text = isLspDiagnosticsVisible,
             underline = isLspDiagnosticsVisible
           })
-    end)
+    end, { desc = "Toggle diagnostics" })
 
     vim.keymap.set("n", "<leader>sn", function()
-    	if vim.wo.relativenumber then
-    		vim.wo.relativenumber = false
-    	vim.wo.number = true
-    	else
-    		vim.wo.relativenumber = true
-    		vim.wo.number = false
-    	end
-    end)
+      vim.wo.relativenumber = not vim.wo.relativenumber
+      vim.wo.number = true
+    end, { desc = "Toggle relative line numbers" })
   '';
 }

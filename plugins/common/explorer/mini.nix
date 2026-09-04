@@ -1,4 +1,14 @@
-{ lib, ... }: {
+{
+  lib,
+  self ? { },
+  ...
+}:
+let
+  ref = self.ref or self.sourceInfo.ref or "fancy";
+  rev = self.shortRev or self.dirtyShortRev or "dev";
+  version = "${ref}:${rev}";
+in
+{
   plugins.mini = {
     enable = true;
     modules = {
@@ -14,12 +24,12 @@
         items = [
           {
             name = "Find File";
-            action = "lua if pcall(require, 'telescope.builtin') then require('telescope.builtin').find_files({follow=true, hidden=true}) else require('mini.files').open() end";
+            action = "lua if _G.Snacks then Snacks.picker.files() else require('mini.files').open() end";
             section = "";
           }
           {
             name = "Recent File";
-            action = "lua if pcall(require, 'telescope.builtin') then require('telescope.builtin').oldfiles() else vim.cmd('browse oldfiles') end";
+            action = "lua if _G.Snacks then Snacks.picker.recent() else vim.cmd('browse oldfiles') end";
             section = "";
           }
           {
@@ -28,12 +38,14 @@
             section = "";
           }
         ];
-        footer = "I use NIX btw. -- RAPSN";
+        footer = "I use nix btw. (${version}) -- RAPSN";
       };
 
       files = { }; # mini file explorer
+      icons = { }; # icon provider
       comment = { }; # toggle comments
     };
+    mockDevIcons = true;
   };
 
   keymaps = [

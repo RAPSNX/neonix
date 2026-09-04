@@ -4,7 +4,7 @@
 ![Go](https://img.shields.io/badge/language-go-%2389b4fa?style=for-the-badge&logo=go&logoColor=white)
 ![Kubernetes](https://img.shields.io/badge/runtime-kubernetes-%2389b4fa?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![Treesitter](https://img.shields.io/badge/plugin-treesitter-%23f2cdcd?style=for-the-badge&logo=treesitter&logoColor=white)
-![Telescope](https://img.shields.io/badge/plugin-telescope-%23f2cdcd?style=for-the-badge&logo=lua&logoColor=white)
+![Snacks](https://img.shields.io/badge/plugin-snacks-%23f2cdcd?style=for-the-badge&logo=lua&logoColor=white)
 
 <img width="512" src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/palette/macchiato.png"></img>
 
@@ -55,4 +55,3 @@ programs.neonix = {
 
 The Neovim logo used in this README was created by [Jason Long](https://github.com/jasonlong) and is licensed under the [Creative Commons Attribution 3.0 Unported License (CC BY 3.0)](https://creativecommons.org/licenses/by/3.0/).
 This logo has been modified for use in this project.
-

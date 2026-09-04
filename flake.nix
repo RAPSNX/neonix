@@ -54,10 +54,12 @@
 
       devShells = forAllSystems (pkgs: import ./devshell.nix { inherit pkgs pre-commit-hooks; });
 
-      homeManagerModules = {
-        default = self.homeManagerModules.neonix;
+      homeModules = {
+        default = self.homeModules.neonix;
         neonix = import ./hm-module.nix self;
       };
+
+      homeManagerModules = self.homeModules;
 
       packages = forAllSystems (pkgs: {
         default = nixvim.legacyPackages.${pkgs.stdenv.hostPlatform.system}.makeNixvimWithModule {
@@ -70,7 +72,7 @@
           };
           # You can use `extraSpecialArgs` to pass additional arguments to your module files
           extraSpecialArgs = {
-            inherit inputs;
+            inherit inputs self;
           };
         };
         mini = nixvim.legacyPackages.${pkgs.stdenv.hostPlatform.system}.makeNixvimWithModule {
@@ -97,14 +99,13 @@
               };
             };
             plugins = {
-              web-devicons.enable = true;
               nvim-autopairs.enable = true;
               nvim-surround.enable = true;
             };
           };
           # You can use `extraSpecialArgs` to pass additional arguments to your module files
           extraSpecialArgs = {
-            inherit inputs;
+            inherit inputs self;
           };
         };
       });

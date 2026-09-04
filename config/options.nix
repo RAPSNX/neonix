@@ -1,6 +1,7 @@
 {
   viAlias = true;
   vimAlias = true;
+  luaLoader.enable = true;
 
   globals = {
     mapleader = " ";
@@ -53,7 +54,7 @@
     undolevels = 10000;
 
     signcolumn = "yes";
-    cmdheight = 1;
+    cmdheight = 0;
     colorcolumn = "120";
 
     foldenable = true;
