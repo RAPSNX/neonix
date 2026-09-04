@@ -138,6 +138,13 @@ vim.cmd.GrugFar()
 assert(package.loaded["grug-far"])
 vim.wait(100)
 
+-- Noice is configured and its module and keymaps are available.
+assert(package.loaded["noice"])
+assert(pcall(require, "noice"))
+assert_map("<leader>nd", "Noice dismiss")
+assert_map("<leader>nh", "Noice history")
+assert_map("<leader>nl", "Noice last")
+
 -- Existing lazy-loading and behavior checks remain covered.
 assert(not package.loaded["neotest"])
 local dap_buf = vim.api.nvim_create_buf(true, false)

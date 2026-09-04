@@ -54,7 +54,7 @@
     undolevels = 10000;
 
     signcolumn = "yes";
-    cmdheight = 1;
+    cmdheight = 0;
     colorcolumn = "120";
 
     foldenable = true;
