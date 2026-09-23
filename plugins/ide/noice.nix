@@ -1,9 +1,9 @@
 {
   plugins.noice = {
-    enable = true;
+    enable = false;
     settings = {
       cmdline = {
-        enabled = true;
+        enabled = false;
         view = "cmdline";
       };
       lsp = {

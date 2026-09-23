@@ -4,8 +4,8 @@
   ...
 }:
 let
-  ref = self.ref or self.sourceInfo.ref or "fancy";
-  rev = self.shortRev or self.dirtyShortRev or "dev";
+  ref = self.ref or self.sourceInfo.ref or "no-ref";
+  rev = self.shortRev or self.dirtyShortRev or "no-rev";
   version = "${ref}:${rev}";
 in
 {

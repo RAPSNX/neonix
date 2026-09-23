@@ -54,7 +54,10 @@
         map("<leader>rq", { "quote", "raw string", "string literal" }, "Toggle quote style")
       '';
 
-      extraOptions.settings.gopls.staticcheck = true;
+      extraOptions.settings.gopls = {
+        staticcheck = true;
+        completionBudget = "500ms";
+      };
     };
 
     dap-go = {
