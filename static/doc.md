@@ -19,6 +19,7 @@ With great power comes great responsiblity, to remember the power of `neovim` he
 | `<leader>tf`  | Run current file's tests                  |
 | `<leader>td`  | Run whole test suite                      |
 | `<leader>tD`  | Debug nearest test                        |
+| `<leader>ta`  | Toggle Ginkgo/Go test adapter             |
 | `<leader>ts`  | Toggle test summary                       |
 | `<leader>to`  | Toggle test output panel                  |
 | `<leader>ll`  | Lint buffer                               |
@@ -32,6 +33,9 @@ With great power comes great responsiblity, to remember the power of `neovim` he
 | `K`           | Toggle `lsp_signature`                    |
 | `L`           | Toggle `lsp_diagnostic: hover`            |
 | `gcc`         | Toggle comment                            |
+
+Neotest uses the Ginkgo adapter by default. Press `<leader>ta` to switch to
+the standard Go `testing` adapter for the current session.
 
 ### Helpers
 

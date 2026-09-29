@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   colorschemes.catppuccin = {
     enable = true;
@@ -7,7 +8,6 @@
         blink_cmp = true;
         diffview = true;
         gitsigns = true;
-        illuminate.enabled = true;
         mini.enabled = true;
         native_lsp = {
           enabled = true;
@@ -24,10 +24,9 @@
             information = [ "underline" ];
           };
         };
-        navic.enabled = true;
         neotest = true;
+        render_markdown = true;
         snacks = true;
-        telescope.enabled = true;
         treesitter = true;
         which_key = true;
       };
@@ -36,13 +35,14 @@
 
   # Theme or related plugins
   plugins = {
-    web-devicons.enable = true; # dependency for core-plugins
-    colorizer.enable = true; # highlight hex colors & more
-    illuminate.enable = true; # highlight word under cursor
     todo-comments.enable = true; # highlight todo comments
-    dressing.enable = true; # better ui-elements
-    headlines.enable = true; # highlights for markdown
+    render-markdown.enable = true;
   };
+
+  extraPlugins = [ pkgs.vimPlugins.nvim-highlight-colors ];
+  extraConfigLua = ''
+    require("nvim-highlight-colors").setup({})
+  '';
 
   # Colorscheme overwrites / fixes
   highlightOverride = {

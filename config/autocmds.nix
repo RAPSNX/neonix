@@ -2,6 +2,7 @@
   autoGroups = {
     highlight_yank.clear = true;
     fast_fold.clear = true;
+    tool_windows.clear = true;
   };
   autoCmd = [
     {
@@ -39,6 +40,28 @@
               vim.wo.foldmethod = "expr"
               vim.w.foldmethod_before_insert = nil
             end
+          end
+        '';
+      };
+    }
+    {
+      event = [ "FileType" ];
+      group = "tool_windows";
+      pattern = [
+        "help"
+        "qf"
+        "dap-float"
+      ];
+      desc = "Configure generic tool windows";
+      callback = {
+        __raw = ''
+          function(event)
+            vim.bo[event.buf].buflisted = false
+            vim.keymap.set("n", "q", "<cmd>close<cr>", {
+              buffer = event.buf,
+              silent = true,
+              desc = "Close window",
+            })
           end
         '';
       };

@@ -1,6 +1,7 @@
 {
   viAlias = true;
   vimAlias = true;
+  luaLoader.enable = true;
 
   globals = {
     mapleader = " ";
@@ -65,6 +66,7 @@
 
     winwidth = 10;
     winminwidth = 10;
+    winborder = "rounded";
     equalalways = false;
   };
 }

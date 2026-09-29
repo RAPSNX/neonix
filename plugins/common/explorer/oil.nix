@@ -6,7 +6,7 @@
       options = {
         desc = "Open parent directory";
       };
-      mode = ["n"];
+      mode = [ "n" ];
     }
   ];
   plugins = {
@@ -18,8 +18,11 @@
         use_default_keymaps = true;
         lsp_file_method.autosave_changes = true;
         buf_options = {
-          buflisted = true;
+          buflisted = false;
           bufhidden = "hide";
+        };
+        win_options = {
+          winbar = "%!v:lua.require('oil').get_current_dir()";
         };
         view_options = {
           show_hidden = true;
