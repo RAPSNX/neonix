@@ -14,12 +14,20 @@ local function assert_map(lhs, needle)
   assert(map and map.rhs and map.rhs:find(needle, 1, true), "unexpected mapping for " .. lhs)
 end
 
+-- language.add never raises for an absent parser, it returns nil -- so the
+-- return value is the signal, not pcall's ok flag.
+local function assert_parser(lang)
+  assert(vim.treesitter.language.add(lang), "missing treesitter parser: " .. lang)
+end
+
 -- Removed plugins must not remain in the runtime path or Lua module graph.
 for _, path in ipairs(vim.api.nvim_list_runtime_paths()) do
   for _, removed in ipairs({
     "LuaSnip",
     "headlines.nvim",
     "indent-o-matic",
+    "noice.nvim",
+    "nui.nvim",
     "nvim-colorizer",
     "nvim-navic",
     "nvim-spectre",
@@ -74,7 +82,11 @@ assert(Snacks.config.get("picker").sources.grep.follow)
 assert(Snacks.config.get("input").enabled)
 assert(Snacks.config.get("words").enabled)
 assert(Snacks.config.get("image").enabled)
-assert(vim.fn.executable("magick") == 1)
+-- External tools the pickers, grug-far and lazygit shell out to. Asserting the
+-- binaries, not just the mappings, is what catches a dropped extraPackages entry.
+for _, exe in ipairs({ "magick", "rg", "fd", "lazygit" }) do
+  assert(vim.fn.executable(exe) == 1, exe .. " is not on PATH")
+end
 for lhs, picker in pairs({
   ["<leader>ff"] = "Snacks.picker.files",
   ["<leader>fz"] = "Snacks.picker.lines",
@@ -109,6 +121,17 @@ edit("tests/markdown.md")
 assert(vim.bo.filetype == "markdown")
 assert(pcall(require, "render-markdown"))
 assert(vim.fn.exists(":RenderMarkdown") == 2)
+-- Loading is not rendering: without the markdown/markdown_inline parsers the
+-- plugin loads, registers its command and draws nothing.
+assert_parser("markdown")
+assert_parser("markdown_inline")
+vim.cmd("RenderMarkdown enable")
+vim.wait(500)
+local rendered = 0
+for _, ns in pairs(vim.api.nvim_get_namespaces()) do
+  rendered = rendered + #vim.api.nvim_buf_get_extmarks(0, ns, 0, -1, {})
+end
+assert(rendered > 0, "render-markdown produced no extmarks")
 assert(pcall(require, "dropbar.api"))
 assert(vim.o.winbar:find("dropbar", 1, true))
 assert_map("<leader>;", "dropbar.api")
@@ -122,12 +145,17 @@ assert(vim.bo.expandtab and vim.bo.shiftwidth == 3, "EditorConfig did not overri
 -- Treesitter and LSP retain Nix and Helm support without legacy Vim plugins.
 edit("flake.nix")
 assert(vim.bo.filetype == "nix")
-assert(pcall(vim.treesitter.language.add, "nix"))
+assert_parser("nix")
 assert(vim.lsp.config.nixd)
 edit("tests/chart/templates/deployment.yaml")
 assert(vim.bo.filetype == "helm")
-assert(pcall(vim.treesitter.language.add, "helm"))
+assert_parser("helm")
 assert(vim.lsp.config.helm_ls)
+-- Grammars with no filetype of their own here: lua backs nixvimInjections and
+-- .lua buffers, regex is pulled in by other parsers' injections.
+for _, lang in ipairs({ "lua", "regex" }) do
+  assert_parser(lang)
+end
 
 -- Grug-far preserves the lazy-loaded search/replace entrypoint.
 assert(not package.loaded["grug-far"])
@@ -137,13 +165,6 @@ assert(grug_map.desc == "Search & Replace")
 vim.cmd.GrugFar()
 assert(package.loaded["grug-far"])
 vim.wait(100)
-
--- Noice is configured and its module and keymaps are available.
-assert(package.loaded["noice"])
-assert(pcall(require, "noice"))
-assert_map("<leader>nd", "Noice dismiss")
-assert_map("<leader>nh", "Noice history")
-assert_map("<leader>nl", "Noice last")
 
 -- Existing lazy-loading and behavior checks remain covered.
 assert(not package.loaded["neotest"])
@@ -158,11 +179,29 @@ vim.api.nvim_buf_delete(dap_buf, { force = true })
 assert(not package.loaded["diffview"])
 assert(not package.loaded["trouble"])
 require("lz.n").trigger_load("neotest")
-assert(_G.neonix_neotest_active_adapter() == "ginkgo")
-_G.neonix_neotest_toggle_adapter()
-assert(_G.neonix_neotest_active_adapter() == "go")
-_G.neonix_neotest_toggle_adapter()
-assert(_G.neonix_neotest_active_adapter() == "ginkgo")
+local ginkgo_dap = require("neotest-ginkgo.dap").build({
+  focus_dir_path = "/tmp/neotest-ginkgo",
+  report_output_path = "/tmp/neotest-ginkgo/report.json",
+  focus_file_path = "/tmp/neotest-ginkgo/example_test.go:42",
+  focus_pattern = "example spec",
+})
+assert(ginkgo_dap.mode == "test" and ginkgo_dap.program == "/tmp/neotest-ginkgo")
+assert(vim.deep_equal(ginkgo_dap.args, {
+  "--ginkgo.json-report", "/tmp/neotest-ginkgo/report.json",
+  "--ginkgo.silence-skips",
+  "--ginkgo.focus-file", "/tmp/neotest-ginkgo/example_test.go:42",
+  "--ginkgo.focus", "example spec",
+}))
+-- Ginkgo vs plain Go is decided per go.mod, so assert the runner a repo gets
+-- rather than any internal flag.
+local nconfig = require("neotest.config")
+local function adapter_for(fixture, file)
+  edit(fixture .. "/" .. file)
+  local project = nconfig.projects[vim.fs.joinpath(root, fixture)]
+  return project and project.adapters[1] and project.adapters[1].name
+end
+assert(adapter_for("tests/go-ginkgo", "spec_test.go") == "neotest-ginkgo")
+assert(adapter_for("tests/go-plain", "plain_test.go") == "neotest-go")
 vim.cmd("DiffviewClose")
 vim.cmd("Trouble diagnostics toggle")
 assert(package.loaded["diffview"])

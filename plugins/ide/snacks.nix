@@ -1,6 +1,11 @@
 { pkgs, ... }:
 {
-  extraPackages = [ pkgs.imagemagick ];
+  extraPackages = with pkgs; [
+    imagemagick
+    ripgrep
+    fd
+    lazygit
+  ];
 
   plugins.snacks = {
     enable = true;

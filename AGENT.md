@@ -6,6 +6,8 @@ designed to be performant, efficient, and versatile.
 - `config/` contains global Neovim options, keymaps, and autocmds.
 - `plugins/` contains modular plugin configuration; keep plugin changes scoped to the relevant module.
 - `tests/` contains fixtures used by the smoke test.
+- `.claude/ISSUES.md` is a hand-maintained list of known issues and gotchas with this
+  setup. Read it before debugging; add to it when something costs you real time.
 
 The default package imports the full global config and plugin tree. Use the `mini`
 package (`nix run .#mini`) for a fast, lightweight setup on servers or ad-hoc systems.

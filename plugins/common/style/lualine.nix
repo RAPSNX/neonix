@@ -21,6 +21,20 @@
           {
             __unkeyed-1 = "mode";
             icon = " ";
+            cond.__raw = "function() return vim.fn.reg_recording() == '' end";
+            color = {
+              gui = "bold";
+            };
+          }
+          {
+            __unkeyed-1.__raw =
+              # lua
+              ''
+                function()
+                  local register = vim.fn.reg_recording()
+                  return register ~= "" and "🔴 REC @" .. register or ""
+                end
+              '';
             color = {
               gui = "bold";
             };
@@ -209,4 +223,23 @@
       };
     };
   };
+
+  autoGroups.lualine_macro_recording.clear = true;
+  autoCmd = [
+    {
+      event = [
+        "RecordingEnter"
+        "RecordingLeave"
+      ];
+      group = "lualine_macro_recording";
+      desc = "Refresh macro recording indicator";
+      callback.__raw = ''
+        function()
+          vim.schedule(function()
+            require("lualine").refresh({ place = { "statusline" } })
+          end)
+        end
+      '';
+    }
+  ];
 }

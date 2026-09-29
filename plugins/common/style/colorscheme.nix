@@ -25,7 +25,6 @@
           };
         };
         neotest = true;
-        noice = true;
         render_markdown = true;
         snacks = true;
         treesitter = true;

@@ -54,7 +54,7 @@
     undolevels = 10000;
 
     signcolumn = "yes";
-    cmdheight = 0;
+    cmdheight = 1;
     colorcolumn = "120";
 
     foldenable = true;
@@ -66,6 +66,7 @@
 
     winwidth = 10;
     winminwidth = 10;
+    winborder = "rounded";
     equalalways = false;
   };
 }

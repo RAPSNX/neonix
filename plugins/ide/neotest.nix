@@ -22,13 +22,6 @@
     enable = true;
     callSetup = false;
     lazyLoad.settings = {
-      before.__raw = ''
-        function()
-          for _, plugin in ipairs({ "plenary.nvim", "nvim-nio", "neotest-go", "neotest-ginkgo" }) do
-            require("lz.n").trigger_load(plugin)
-          end
-        end
-      '';
       keys = [
         {
           __unkeyed-1 = "<leader>tt";
@@ -51,11 +44,6 @@
           desc = "Debug nearest test";
         }
         {
-          __unkeyed-1 = "<leader>ta";
-          __unkeyed-2 = "<cmd>lua _G.neonix_neotest_toggle_adapter()<CR>";
-          desc = "Toggle test adapter (Ginkgo/Go)";
-        }
-        {
           __unkeyed-1 = "<leader>ts";
           __unkeyed-2 = ''<cmd>lua require("neotest").summary.toggle()<CR>'';
           desc = "Toggle test summary";
@@ -70,53 +58,74 @@
       after.__raw = ''
         function()
           local neotest = require("neotest")
-          local adapters = {
-            go = require("neotest-go"),
-            ginkgo = require("neotest-ginkgo"),
-          }
 
-          -- Ginkgo is the default for each Neovim session. <leader>ta changes
-          -- this value so subsequent test discovery and runs use plain Go.
-          local active_adapter = "ginkgo"
-
-          -- Both upstream adapters accept every *_test.go filename, so Neotest
-          -- cannot infer whether a file belongs to Ginkgo or standard Go tests.
-          -- Wrap copies of the adapters and let only the selected one claim files.
-          -- Copying keeps the modules returned by require() unchanged.
-          local function selectable_adapter(name, adapter)
-            local wrapped = vim.tbl_extend("force", {}, adapter)
-            wrapped.is_test_file = function(file_path)
-              return active_adapter == name and adapter.is_test_file(file_path)
+          -- Upstream hands Ginkgo's CLI-only --ginkgo.output-dir to the test
+          -- binary Delve launches, which rejects it ("flag provided but not
+          -- defined") and kills every debug session. Rewrite the pair into one
+          -- absolute --ginkgo.json-report. neotest-ginkgo looks `build` up on
+          -- the module at call time, so overriding it here takes effect.
+          local ginkgo_dap = require("neotest-ginkgo.dap")
+          local upstream_build = ginkgo_dap.build
+          ginkgo_dap.build = function(context)
+            local strategy = upstream_build(context)
+            local rewritten, i = {}, 1
+            while i <= #strategy.args do
+              local arg = strategy.args[i]
+              if arg == "--ginkgo.output-dir" then
+                i = i + 2
+              elseif arg == "--ginkgo.json-report" then
+                table.insert(rewritten, arg)
+                table.insert(rewritten, context.report_output_path)
+                i = i + 2
+              else
+                table.insert(rewritten, arg)
+                i = i + 1
+              end
             end
-            return wrapped
+            strategy.args = rewritten
+            return strategy
           end
 
-          local function adapter_label()
-            return active_adapter == "ginkgo" and "Ginkgo" or "Go"
-          end
+          local go = require("neotest-go")
+          -- `dap = {}` drops upstream's --ginkgo.v default via its public API.
+          local ginkgo = require("neotest-ginkgo").setup({ dap = {} })
 
-          _G.neonix_neotest_toggle_adapter = function()
-            active_adapter = active_adapter == "ginkgo" and "go" or "ginkgo"
-            vim.notify("Neotest adapter: " .. adapter_label())
-          end
-
-          -- Expose the session mode for smoke tests without exposing adapters.
-          _G.neonix_neotest_active_adapter = function()
-            return active_adapter
+          -- Ginkgo vs plain Go is a property of the module, not of the file:
+          -- both adapters claim every *_test.go and Neotest takes the first
+          -- match. Decide once per go.mod and let Neotest route by project root.
+          local configured = {}
+          local function configure_project(path)
+            if path == "" then
+              return
+            end
+            local root = vim.fs.root(path, "go.mod")
+            if not root or configured[root] then
+              return
+            end
+            configured[root] = true
+            local uses_ginkgo = false
+            local fh = io.open(vim.fs.joinpath(root, "go.mod"), "r")
+            if fh then
+              uses_ginkgo = fh:read("*a"):find("github.com/onsi/ginkgo", 1, true) ~= nil
+              fh:close()
+            end
+            neotest.setup_project(root, { adapters = { uses_ginkgo and ginkgo or go } })
           end
 
           neotest.setup({
-            discovery = {
-              enabled = false,
-            },
             output = {
               open_on_run = true,
             },
-            adapters = {
-              selectable_adapter("ginkgo", adapters.ginkgo),
-              selectable_adapter("go", adapters.go),
-            },
+            adapters = { go },
           })
+
+          vim.api.nvim_create_autocmd("FileType", {
+            pattern = "go",
+            callback = function(event)
+              configure_project(vim.api.nvim_buf_get_name(event.buf))
+            end,
+          })
+          configure_project(vim.api.nvim_buf_get_name(0))
 
           -- These filetypes do not exist until Neotest is loaded, so their
           -- buffer-local mappings can stay inside this lazy-load callback.
@@ -129,6 +138,9 @@
             callback = function(event)
               vim.bo[event.buf].buflisted = false
               vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true, desc = "Close window" })
+              if event.match == "neotest-summary" then
+                vim.wo.wrap = false
+              end
             end,
           })
         end

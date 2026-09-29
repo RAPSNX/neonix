@@ -32,6 +32,10 @@
         diff
         fish
         json
+        lua
+        markdown
+        markdown_inline
+        regex
         toml
         vhs
         vim
